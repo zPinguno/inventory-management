@@ -38,7 +38,6 @@ class LoginPage(PageBase):
         self.fCenterWidget.setGraphicsEffect(self.setBoxShadow())
         self.setCentralWidget(self.fCenterWidget)
     def prepareStyles(self):
-        self.fVLayout.setProperty('class', 'VLayout')
         self.fUserName.setProperty('class', 'loginElements')
         self.fPassword.setProperty('class', 'loginElements')
         self.fLoginButton.setProperty('class', 'loginElements')

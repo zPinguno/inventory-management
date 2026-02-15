@@ -1,21 +1,16 @@
 .loginPage {
-    border:4px solid white;
-    border-radius: 250px;
-
     background-color: gray;
+    margin: 180px 320px 170px 320px;
+    border-radius: 50px;
 
-}
-.VLayout{
-    background-color: red;
-    min-width: 500px;
-    max-height: 300px;
 }
 .loginElements{
     background-color: rgb(40, 40, 40);
     border-color: whitesmoke;
-    min-width: 300px;
-    min-height: 40px;
-    margin: 350px 150px 350px 200px;
+    min-height: 40;
+    max-width: 250;
+    margin-right: 150px;
+    margin-left: 150px;
 }
 .loginElements, select, textarea{
     color: #ffffff;

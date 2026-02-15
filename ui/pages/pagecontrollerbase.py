@@ -1,6 +1,5 @@
 from ui.pages.pageBase import PageBase
 
-
 class PageControllerBase:
     page: PageBase
     def __init__(self):
@@ -9,6 +8,6 @@ class PageControllerBase:
         self.page.initComponents()
         self.initLogic()
     def hidePage(self):
-        pass
+        self.page.hide()
     def initLogic(self):
         pass

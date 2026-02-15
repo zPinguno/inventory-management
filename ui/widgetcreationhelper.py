@@ -62,13 +62,11 @@ def createSidepanel(page:QMainWindow):
 
 def createTitle(name:str,  layout:QVBoxLayout, x = None, y = None):
     label = QLabel('<h1>' + name + '</h1>')
-    label.setAlignment(Qt.AlignmentFlag.AlignHCenter)
     if x is not None and y is not None:
         label.move(x, y)
     if layout is not None:
-        layout.addWidget(label)
+        layout.addWidget(label, alignment= Qt.AlignmentFlag.AlignHCenter)
 
-    return label
     return label
 def createTable(page:QMainWindow,  layout:QVBoxLayout, tableHeaders: list, x = None, y = None, width = None):
     table = QTableWidget(page)

@@ -10,6 +10,7 @@ from type.department import Department
 from type.subject import Subject
 from type.group import Group
 from type.location import Location
+from type.itemheader import ItemHeader
 
 
 class Model:
@@ -19,7 +20,7 @@ class Model:
         self.items: List[Item] = []
         self.objects: List[Object] = []
         self.departments: List[Department] = []
-        self.location: List[Location] = []
+        self.locations: List[Location] = []
         self.subjects: List[Subject] = []
         self.groups: List[Group] = []
         self.load()
@@ -150,7 +151,7 @@ class Model:
         self.groups.append(group)
     
     def addLocation(self, location: Location) -> None:
-        self.location.append(location)
+        self.locations.append(location)
     
     def login(self, userName: str, password: str) -> User | None:
         for u in self.users:
@@ -158,11 +159,34 @@ class Model:
                 return u
         return None
 
-    def getAllResponsibiltityUserNames(self):
+    def getAllUserNamesByRole(self, userRole = UserRole.ADMIN.value or UserRole.BORROWER.value or
+        UserRole.RESPONSIBLE.value or UserRole.TEACHER.value):
         self.load()
         users = self.users
         responsibilityUserNames = []
         for user in users:
-            if user.roles.value == UserRole.RESPONSIBLE.value:
+            if user.roles.value == userRole:
                 responsibilityUserNames.append(user.userName)
         return responsibilityUserNames
+
+    
+    def getAllSpecialItemNames(self, tableName = ItemHeader.DEPARTMENT.value or ItemHeader.SUBJECT.value or 
+        ItemHeader.OBJECT.value or ItemHeader.LOCATION.value or ItemHeader.GROUP.value): 
+        self.load()
+
+        match tableName:
+            case ItemHeader.DEPARTMENT.value:
+                table = self.departments
+            case ItemHeader.SUBJECT.value:
+                table = self.subjects
+            case ItemHeader.OBJECT.value:
+                table = self.objects
+            case ItemHeader.LOCATION.value:
+                table = self.locations
+            case ItemHeader.GROUP.value:
+                table = self.groups
+    
+        itemNames = []
+        for item in table:
+            itemNames.append(item.getName())
+        return itemNames

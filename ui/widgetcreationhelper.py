@@ -3,7 +3,7 @@ from PyQt6.QtWidgets import QLineEdit, QLabel, QFrame, QVBoxLayout, QHBoxLayout,
     QPushButton
 
 
-def createButton(page:QMainWindow, name: str, layout:QVBoxLayout,  x=None, y=None):
+def createButton(page:QMainWindow, name: str, layout:QVBoxLayout = None,  x=None, y=None):
     button = QPushButton(name, page)
     if x is not None and y is not None:
         button.move(x, y)
@@ -13,7 +13,7 @@ def createButton(page:QMainWindow, name: str, layout:QVBoxLayout,  x=None, y=Non
     return button
 
 
-def createDropDownMenu(page:QMainWindow, layout:QVBoxLayout,  wordList: list):
+def createDropDownMenu(page:QMainWindow, wordList: list, layout:QVBoxLayout):
     dropDownMenu = QComboBox(page)
     dropDownMenu.addItems(wordList)
     dropDownMenu.setEditable(True)
@@ -68,7 +68,7 @@ def createTitle(name:str,  layout:QVBoxLayout, x = None, y = None):
         layout.addWidget(label, alignment= Qt.AlignmentFlag.AlignHCenter)
 
     return label
-def createTable(page:QMainWindow,  layout:QVBoxLayout, tableHeaders: list, x = None, y = None, width = None):
+def createTable(page:QMainWindow, tableHeaders: list, x = None, y = None, width = None):
     table = QTableWidget(page)
     table.setColumnCount(len(tableHeaders))
     if width is not None:
@@ -80,7 +80,6 @@ def createTable(page:QMainWindow,  layout:QVBoxLayout, tableHeaders: list, x = N
     table.horizontalHeader().setStyleSheet("QHeaderView::section { border: 1px solid gray; }")
     if x is not None and y is not None:
         table.move(x, y)
-    if layout is not None:
-        layout.addWidget(table)
+
 
     return table

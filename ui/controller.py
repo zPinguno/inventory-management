@@ -17,6 +17,10 @@ class Controller:
         self.fMainPageController = MainController()
         self.fLoginPageController.showPage()
         self.fLoginPageController.page.fLoginButton.clicked.connect(self.onLogin)
+        self.fLoginPageController.page.fPassword.returnPressed.connect(self.onLogin)
+    
+    def initMainPageEvents(self):
+        self.fMainPageController.page.fFilterDropDown.currentIndexChanged.connect(self.fMainPageController.selectInputForMainPage)
 
     def onLogin(self):
         username = self.fLoginPageController.page.fUserName.text()
@@ -26,6 +30,7 @@ class Controller:
             self.fCurrentUser = user
             self.fLoginPageController.hidePage()
             self.fMainPageController.showPage()
+            self.initMainPageEvents()
         else:
             self.fLoginPageController.showLoginError()
 

@@ -47,22 +47,28 @@ class AddUser(DialogBase):
         self.fFirstNameInput = createInput(self, 'Vorname', self.fVLayout)
 
         self.fLastNameLabel = createText('Nachname', self.fVLayout)
-        self.fLastNameLabel = createInput(self, 'Nachname', self.fVLayout)
+        self.fLastNameInput = createInput(self, 'Nachname', self.fVLayout)
 
         self.fUserNameLabel = createText('Benutzername', self.fVLayout)
         self.fUserNameInput = createInput(self, 'Benutzername', self.fVLayout)
 
-        self.fPasswordInput = createText('Passwort', self.fVLayout)
-        self.fPasswordLabel = createInput(self, 'Passwort', self.fVLayout)
+        self.fPasswordLabel = createText('Passwort', self.fVLayout)
+        self.fPasswordInput = createInput(self, 'Passwort', self.fVLayout)
         
         self.createAllCheckboxes()
 
-        self.fSaveButton = createButton(self, 'Speichern')
+        self.fSaveButton = createButton(self, 'Speichern', self.fVLayout)
+
+        self.fCenterWidget = QWidget(self)
 
 
         self.prepareWidgets()
     def prepareWidgets(self):
         self.fPasswordInput.setEchoMode(QLineEdit.EchoMode.Password)
+        self.fCenterWidget.setLayout(self.fVLayout)
+        self.fVLayout.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        self.fCenterWidget.move(125, 0)
     def prepareStyles(self):
         pass
 

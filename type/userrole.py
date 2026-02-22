@@ -6,13 +6,6 @@ class UserRole(Enum):
     TEACHER = "Lehrer"
     BORROWER = "Ausleiher"
 
-def normalizeUsers(users):
-    for user in users:
-        if not isinstance(user, UserRole):
-            user.roles = normalizeRoleText(user.roles)
-
-    return users
-
 def normalizeRoleText(text):
     match text:
         case 'Verantwortlicher':

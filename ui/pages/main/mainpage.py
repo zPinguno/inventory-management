@@ -12,11 +12,11 @@ from ui.widgetcreationhelper import createDropDownMenu, createInput, createTable
 class MainPage(PageBase):
     fTitle: QLabel
     fHeader: QFrame
-    fSidePanel: QFrame
-    fHeaderButton: QPushButton
+    fLogoutButton: QPushButton
     fExportButton: QPushButton
     fTable: QTableWidget
     fAddItemButton: QPushButton
+    fAdminSiteButton: QPushButton
     fFilterDropDown: QComboBox
     fFilterInput: QLineEdit
     fFilterSearchButton: QPushButton
@@ -34,15 +34,16 @@ class MainPage(PageBase):
         super().__init__()
     def initComponents(self):
         super().initComponents()
-        self.setWindowTitle('main')
+        self.setWindowTitle('Main')
         self.loadStyleSheet()
         self.createWidgets()
         self.show()
     def createWidgets(self):
-        self.fHeaderButton = createButton(self, 'Logout', x = 850, y = 6)
+        self.fLogoutButton = createButton(self, 'Logout', x = 850, y = 6)
+        self.fAdminSiteButton = createButton(self, 'Admin Seite', x = 15, y = 6)
         self.fExportButton = createButton(self, 'Export in CSV', x = 250, y = 6)
         self.fAddItemButton = createButton(self, '+', x = self.width - 80, y = self.height - 80)
-        self.fAddItemButton.setFixedSize(60, 60)
+  
         self.fVLayout = QVBoxLayout()
         distanceSidePanel = 200
 
@@ -53,8 +54,6 @@ class MainPage(PageBase):
         page= self,
         x = distanceSidePanel, y = 0
         )
-
-        self.fSidePanel = createSidepanel(self)
     
         self.fFilterLabel = createText('Suche:', self.fVLayout)
         self.fFilterDropDown = createDropDownMenu(self, self.filterHeaders, self.fVLayout)
@@ -75,8 +74,10 @@ class MainPage(PageBase):
         self.fMainFilterWidget.setLayout(self.fVLayout)
         self.fMainFilterWidget.setFixedSize(200, 130)
         self.fVLayout.setSpacing(5)
+        self.fAddItemButton.setFixedSize(60, 60)
 
-        self.fHeaderButton.raise_()
+        self.fAdminSiteButton.raise_()
+        self.fLogoutButton.raise_()
         self.fExportButton.raise_()
         self.fAddItemButton.raise_()
     def prepareStyles(self):

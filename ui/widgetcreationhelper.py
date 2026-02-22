@@ -1,58 +1,53 @@
 from PyQt6.QtCore import Qt
-from PyQt6.QtWidgets import QLineEdit, QLabel, QFrame, QVBoxLayout, QHBoxLayout, QMainWindow, QTableWidget, QComboBox, \
-    QPushButton
+from PyQt6.QtWidgets import QCheckBox, QLineEdit, QLabel, QFrame, QVBoxLayout, QHBoxLayout, QMainWindow, QDialog, QTableWidget, QComboBox, \
+    QPushButton, QWidget
 
 
-def createButton(page:QMainWindow, name: str, layout:QVBoxLayout = None,  x=None, y=None):
+def createButton(page:QMainWindow | QDialog, name: str, layout:QVBoxLayout = None,  x=None, y=None):
     button = QPushButton(name, page)
-    if x is not None and y is not None:
-        button.move(x, y)
-    if layout is not None:
-        layout.addWidget(button)
+    checkForPosition(button, layout, x, y)
 
     return button
 
-
-def createDropDownMenu(page:QMainWindow, wordList: list, layout:QVBoxLayout):
+def createDropDownMenu(page:QMainWindow | QDialog, wordList: list, layout:QVBoxLayout):
     dropDownMenu = QComboBox(page)
     dropDownMenu.addItems(wordList)
     dropDownMenu.setEditable(True)
     dropDownMenu.lineEdit().setReadOnly(True)
     dropDownMenu.lineEdit().setAlignment(Qt.AlignmentFlag.AlignHCenter)
     dropDownMenu.setMinimumHeight(22)
-    if layout is not None:
-        layout.addWidget(dropDownMenu)
+    checkForPosition(dropDownMenu, layout)
 
     return dropDownMenu
-def createInput(page:QMainWindow, placeHolderName:str,layout:QVBoxLayout, x = None, y = None):
+def createInput(page:QMainWindow | QDialog , placeHolderName:str,layout:QVBoxLayout, x = None, y = None):
     lineEdit = QLineEdit(page)
     lineEdit.setPlaceholderText(placeHolderName)
-    if x is not None and y is not None:
-        lineEdit.move(x, y)
-    if layout is not None:
-        layout.addWidget(lineEdit)
+
+    checkForPosition(lineEdit, layout, x, y)
+
     return lineEdit
+def createCheckbox(page:QMainWindow | QDialog , name:str,layout:QVBoxLayout, x = None, y = None):
+    checkBox = QCheckBox(name, page)
+    checkForPosition(checkBox, layout, x, y)
+
+    return checkBox
+
 def createText(name:str, layout:QVBoxLayout, x = None, y = None):
     label = QLabel(name)
     label.setAlignment(Qt.AlignmentFlag.AlignHCenter)
-    if x is not None and y is not None:
-        label.move(x, y)
-    if layout is not None:
-        layout.addWidget(label)
+    checkForPosition(label, layout, x, y)
+
     return label
-def createHeader(centerName:str, width: int, page:QMainWindow, x = None, y = None):
+def createHeader(centerName:str, width: int, page:QMainWindow | QDialog, x = None, y = None):
     layout = QVBoxLayout()
     headerWidget = QFrame(page)
     headerTitle = QLabel('<h2>' + centerName + '</h2>')
     headerTitle.setAlignment(Qt.AlignmentFlag.AlignHCenter)
     headerWidget.setFixedSize(width, 50) # Jeder der die Zahlen hier verändert ist eine Entäuschung
-    headerWidget.setLayout(layout)
-    layout.addWidget(headerTitle)
-    if x is not None and y is not None:
-        headerWidget.move(x, y)
+    checkForPosition(headerWidget, layout, x, y)
 
     return headerWidget
-def createSidepanel(page:QMainWindow):
+def createSidepanel(page:QMainWindow | QDialog):
     layout = QHBoxLayout()
     sidePanelWidget = QFrame(page)
     sidePanelWidget.setFixedSize(200, 600)
@@ -62,13 +57,11 @@ def createSidepanel(page:QMainWindow):
 
 def createTitle(name:str,  layout:QVBoxLayout, x = None, y = None):
     label = QLabel('<h1>' + name + '</h1>')
-    if x is not None and y is not None:
-        label.move(x, y)
-    if layout is not None:
-        layout.addWidget(label, alignment= Qt.AlignmentFlag.AlignHCenter)
+    label.setAlignment(Qt.AlignmentFlag.AlignHCenter)
+    checkForPosition(label, layout, x, y)
 
     return label
-def createTable(page:QMainWindow, tableHeaders: list, x = None, y = None, width = None):
+def createTable(page:QMainWindow | QDialog, tableHeaders: list, x = None, y = None, width = None):
     table = QTableWidget(page)
     table.setColumnCount(len(tableHeaders))
     if width is not None:
@@ -78,8 +71,13 @@ def createTable(page:QMainWindow, tableHeaders: list, x = None, y = None, width 
     table.resizeColumnToContents(len(tableHeaders))
     table.setHorizontalHeaderLabels(tableHeaders)
     table.horizontalHeader().setStyleSheet("QHeaderView::section { border: 1px solid gray; }")
-    if x is not None and y is not None:
-        table.move(x, y)
+    checkForPosition(table, None, x, y)
 
 
     return table
+
+def checkForPosition(widget: QWidget, layout: QVBoxLayout = None, x = None, y = None):
+    if x is not None and y is not None:
+        widget.move(x, y)
+    if layout is not None:
+        layout.addWidget(widget)

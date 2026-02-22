@@ -17,6 +17,7 @@ class LoginPage(PageBase):
         super().__init__()
     def initComponents(self):
         super().initComponents()
+        self.setWindowTitle('Login')
         self.loadStyleSheet()
         self.createWidgets()
         self.show()

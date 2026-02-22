@@ -1,10 +1,11 @@
 import sqlite3
+import json
 from typing import List
 
 from type.itemstate import normalizeItems
 from type.user import User
 from type.item import Item
-from type.userrole import normalizeUsers, UserRole
+from type.userrole import  UserRole
 from type.object import Object
 from type.department import Department
 from type.subject import Subject
@@ -81,7 +82,7 @@ class Model:
             if self.users:
                 conn.executemany(
                     "INSERT INTO Users (FirstName, LastName, UserName, Password, Role) VALUES (?, ?, ?, ?, ?)",
-                    ((u.firstName, u.lastName, u.userName, u.password, u.roles.value if isinstance(u.roles, UserRole) else u.roles) for u in self.users)
+                    ((u.firstName, u.lastName, u.userName, u.password, json.dumps([e.value for e in u.roles])) for u in self.users)
                 )
 
             conn.execute("DELETE FROM Items")
@@ -114,16 +115,16 @@ class Model:
             self._ensure_tables(conn)
 
             cur = conn.execute("SELECT FirstName, LastName, UserName, Password, Role FROM Users ORDER BY Id")
-            self.users = normalizeUsers([
+            self.users = [
                 User(
                     firstName=row[0] or "",
                     lastName=row[1] or "",
                     userName=row[2] or "",
                     password=row[3] or "",
-                    roles=row[4] or ""
+                    roles= json.loads(row[4]) or ""
                 )
                 for row in cur.fetchall()
-            ])
+            ]
 
             cur = conn.execute("SELECT GroupName, Department, Subject, Location, ResponsiblePerson, State FROM Items ORDER BY Id")
             self.items = normalizeItems([
@@ -165,7 +166,7 @@ class Model:
         users = self.users
         responsibilityUserNames = []
         for user in users:
-            if user.roles.value == userRole:
+            if userRole in user.roles:
                 responsibilityUserNames.append(user.userName)
         return responsibilityUserNames
 

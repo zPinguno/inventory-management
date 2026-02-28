@@ -10,3 +10,5 @@ class PageBase(QMainWindow):
 
     def initComponents(self):
         pass
+    def deInitComponents(self):
+        pass

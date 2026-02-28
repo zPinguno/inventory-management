@@ -9,5 +9,8 @@ class PageControllerBase:
         self.initLogic()
     def hidePage(self):
         self.page.hide()
+        self.page.deInitComponents()
     def initLogic(self):
         pass
+    def getPage(self):
+        return self.page

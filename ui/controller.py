@@ -6,12 +6,17 @@ from type.user import User
 from model.model import Model
 import hashlib
 
+from ui.pages.pageBase import PageBase
+from helper.Helper import getControllerByPage
+
 class Controller:
     fCurrentUser: User
     model: Model
     fLoginPageController: LoginController
     fMainPageController: MainController
     fAdminPageController: AdminController
+
+    fCurrentPage: PageBase
     def __init__(self):
         self.model = Model()
         self.createUsers()
@@ -24,28 +29,31 @@ class Controller:
         self.fCurrentUser = None
         self.selectPage("Login")
     
-    def selectPage(self, pageName = "Admin" or "Login" or "Main"):
-        self.fMainPageController.hidePage()
-        self.fAdminPageController.hidePage()
-        self.fLoginPageController.hidePage()
+    def selectPage(self, pageName = "Main"):
+        currentController = getControllerByPage(self.fCurrentPage, self)
+        currentController.hidePage()
+
+
         match pageName:
             case "Login":
+                self.fCurrentPage = self.fLoginPageController.page
                 self.fLoginPageController.showPage()
                 self.fLoginPageController.page.fLoginButton.clicked.connect(self.onLogin)
                 self.fLoginPageController.page.fPassword.returnPressed.connect(self.onLogin)
             case "Main":
+                self.fCurrentPage = self.fMainPageController.page
                 self.fMainPageController.showPage()
                 self.fMainPageController.page.fFilterDropDown.currentIndexChanged.connect(self.fMainPageController.selectInputForMainPage)
                 self.fMainPageController.page.fLogoutButton.clicked.connect(self.showLoginPage)
                 self.adminPageButton()
             case "Admin":
+               self.fCurrentPage = self.fAdminPageController.page
                self.fAdminPageController.showPage()
 
 
 
-
     def adminPageButton(self):
-        if (UserRole.ADMIN.value in self.fCurrentUser.roles):
+        if UserRole.ADMIN.value in self.fCurrentUser.roles:
             self.fMainPageController.page.fAdminSiteButton.show()
         else:
             self.fMainPageController.page.fAdminSiteButton.hide()
@@ -56,7 +64,7 @@ class Controller:
         username = self.fLoginPageController.page.fUserName.text()
         password = self.fLoginPageController.page.fPassword.text()
         user = self.model.login(username, self.hashPassword(password))
-        if (user != None):
+        if user != None:
             self.fCurrentUser = user
             self.selectPage("Main")
         else:

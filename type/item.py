@@ -15,8 +15,8 @@ class Item:
     responsiblePerson: User
     state: ItemState
 
-    def __init__(self,object, group,department, subject, location, responsiblePerson, state):
-        self.object = object
+    def __init__(self, obj:Object, group:Group, department:Department, subject:Subject, location:Location, responsiblePerson:User, state:ItemState):
+        self.object = obj
         self.group = group
         self.department = department
         self.subject = subject

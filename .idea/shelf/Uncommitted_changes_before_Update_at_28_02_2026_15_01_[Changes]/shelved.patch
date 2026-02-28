@@ -1,0 +1,208 @@
+Index: type/item.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>from type.itemstate import ItemState\r\nfrom type.user import User\r\nfrom type.object import Object\r\nfrom type.group import Group\r\nfrom type.department import Department\r\nfrom type.subject import Subject\r\nfrom type.location import Location\r\n\r\nclass Item:\r\n    object: Object\r\n    group: Group\r\n    department: Department\r\n    subject: Subject\r\n    location: Location\r\n    responsiblePerson: User\r\n    state: ItemState\r\n\r\n    def __init__(self,object, group,department, subject, location, responsiblePerson, state):\r\n        self.object = object\r\n        self.group = group\r\n        self.department = department\r\n        self.subject = subject\r\n        self.location = location \r\n        self.responsiblePerson = responsiblePerson\r\n        self.state = state\r\n    def getobject(self): \r\n        return self.object\r\n    def setobject(self, item): \r\n        self.object = item        \r\n    def getGroup(self): \r\n        return self.group\r\n    def setGroup(self, group): \r\n        self.group = group\r\n    def getDepartment(self): \r\n        return self.department\r\n    def setDepartment(self, department): \r\n        self.department = department\r\n    def getSubject(self): \r\n        return self.subject\r\n    def setSubject(self, subject): \r\n        self.subject = subject\r\n    def getLocation(self):\r\n        return self.location \r\n    def setLocation(self, location): \r\n        self.location = location\r\n    def getResponsiblePerson(self):\r\n        return self.responsiblePerson\r\n    def setResponsiblePerson(self, responsiblePerson): \r\n        self.responsiblePerson = responsiblePerson
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/type/item.py b/type/item.py
+--- a/type/item.py	(revision ef086f9fbfb741e5bdd721534d9522efae15439b)
++++ b/type/item.py	(date 1772287201221)
+@@ -15,8 +15,8 @@
+     responsiblePerson: User
+     state: ItemState
+ 
+-    def __init__(self,object, group,department, subject, location, responsiblePerson, state):
+-        self.object = object
++    def __init__(self, obj:Object, group:Group, department:Department, subject:Subject, location:Location, responsiblePerson:User, state:ItemState):
++        self.object = obj
+         self.group = group
+         self.department = department
+         self.subject = subject
+Index: ui/pages/main/maincontroller.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>from type.itemheader import ItemHeader\r\n\r\nfrom ui.dialogs.addItem.addItem import AddItem\r\nfrom ui.pages.main.mainpage import MainPage\r\nfrom ui.pages.pagecontrollerbase import PageControllerBase\r\nfrom model.model import Model\r\n\r\nclass MainController(PageControllerBase):\r\n    page: MainPage\r\n\r\n    model: Model\r\n    def __init__(self):\r\n        super().__init__()\r\n        self.model = Model()\r\n        self.page = MainPage(self.model)\r\n    def initLogic(self):\r\n        self.selectInputForMainPage()\r\n        self.page.fAddItemButton.clicked.connect(self.showAddItemDialog)\r\n\r\n\r\n    def selectInputForMainPage(self):\r\n    \r\n        self.page.fResponsiblePersonDropDown.hide()\r\n        self.page.fStateDropDown.hide()\r\n        self.page.fFilterInput.hide()\r\n    \r\n        currentFilterDropDown = self.page.fFilterDropDown.currentText()\r\n        match currentFilterDropDown:\r\n            case ItemHeader.RESPONSIBLE.value:\r\n                self.page.fResponsiblePersonDropDown.show()\r\n            case ItemHeader.STATE.value:\r\n                self.page.fStateDropDown.show()\r\n            case _:\r\n                self.page.fFilterInput.show()\r\n    def showAddItemDialog(self):\r\n        dialog = AddItem(self.model)
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/ui/pages/main/maincontroller.py b/ui/pages/main/maincontroller.py
+--- a/ui/pages/main/maincontroller.py	(revision ef086f9fbfb741e5bdd721534d9522efae15439b)
++++ b/ui/pages/main/maincontroller.py	(date 1772286617615)
+@@ -33,4 +33,8 @@
+             case _:
+                 self.page.fFilterInput.show()
+     def showAddItemDialog(self):
+-        dialog = AddItem(self.model)
+\ No newline at end of file
++        dialog = AddItem(self.model)
++
++        if dialog.exec():
++            dialog
++
+Index: ui/dialogs/addItem/addItem.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/ui/dialogs/addItem/addItem.py b/ui/dialogs/addItem/addItem.py
+new file mode 100644
+--- /dev/null	(date 1772287179929)
++++ b/ui/dialogs/addItem/addItem.py	(date 1772287179929)
+@@ -0,0 +1,106 @@
++from PyQt6.QtWidgets import QVBoxLayout, QComboBox, QLabel, QPushButton, QWidget
++
++from model.model import Model
++from type.department import Department
++from type.group import Group
++from type.item import Item
++from type.itemstate import getAllStates, getAllStatesAsText, normalizeText
++from type.location import Location
++from type.object import Object
++from type.subject import Subject
++from type.user import User
++from ui.dialogs.dialogBase import DialogBase
++from ui.widgetcreationhelper import createText, createButton, createDropDownMenu
++
++
++class AddItem(DialogBase):
++    model: Model
++
++    fVLayout: QVBoxLayout
++    fCenterWidget: QWidget
++
++    fObjectDropdown: QComboBox
++    fGroupDropdown: QComboBox
++    fDepartmentDropdown: QComboBox
++    fSubjectDropdown: QComboBox
++    fLocationDropdown: QComboBox
++    fResponsiblePersonDropdown: QComboBox
++    fStateDropdown: QComboBox
++
++    fObjectLabel: QLabel
++    fGroupLabel: QLabel
++    fDepartmentLabel: QLabel
++    fSubjectLabel: QLabel
++    fLocationLabel: QLabel
++    fResponsiblePersonLabel: QLabel
++    fStateLabel: QLabel
++
++    fSaveButton: QPushButton
++    def __init__(self, model:Model):
++        self.model = model
++        super().__init__()
++
++    def initComponents(self):
++        super().initComponents()
++        self.createWidgets()
++        self.refreshWordlist(self.model)
++
++    def createWidgets(self):
++        self.fVLayout = QVBoxLayout()
++
++        self.fObjectLabel = createText('Itemname', self.fVLayout)
++        self.fObjectDropdown = createDropDownMenu(self, list(), self.fVLayout)
++
++        self.fGroupLabel = createText('Gruppe', self.fVLayout)
++        self.fGroupDropdown = createDropDownMenu(self, list(), self.fVLayout)
++
++        self.fDepartmentLabel = createText('Abteilung', self.fVLayout)
++        self.fDepartmentDropdown = createDropDownMenu(self, list(), self.fVLayout)
++
++        self.fSubjectLabel = createText('Fach', self.fVLayout)
++        self.fSubjectDropdown = createDropDownMenu(self, list(), self.fVLayout)
++
++        self.fLocationLabel = createText('Ort', self.fVLayout)
++        self.fLocationDropdown = createDropDownMenu(self, list(), self.fVLayout)
++
++        self.fResponsiblePersonLabel = createText('Verantwortlicher', self.fVLayout)
++        self.fResponsiblePersonDropdown = createDropDownMenu(self, list(), self.fVLayout)
++
++        self.fStateLabel = createText('Zustand', self.fVLayout)
++        self.fStateDropdown = createDropDownMenu(self, list(), self.fVLayout)
++
++        self.fSaveButton = createButton(self, 'Speichern', self.fVLayout)
++
++        self.fCenterWidget = QWidget(self)
++        self.fCenterWidget.setLayout(self.fVLayout)
++
++    def refreshWordlist(self, model:Model):
++        model.load()
++        self.fObjectDropdown.clear()
++        self.fObjectDropdown.addItems(model.getAllObjects())
++        self.fGroupDropdown.clear()
++        self.fGroupDropdown.addItems(model.getAllGroups())
++        self.fDepartmentDropdown.clear()
++        self.fDepartmentDropdown.addItems(model.getAllDepartments())
++        self.fSubjectDropdown.clear()
++        self.fSubjectDropdown.addItems(model.getAllSubjects())
++        self.fLocationDropdown.clear()
++        self.fLocationDropdown.addItems(model.getAllLocations())
++        self.fResponsiblePersonDropdown.clear()
++        self.fResponsiblePersonDropdown.addItems(model.getAllResponsibleUser())
++        self.fStateDropdown.clear()
++        self.fStateDropdown.addItems(getAllStatesAsText())
++
++    def getResult(self):
++        object = self.getInstanceByText(self.fObjectDropdown.currentText(), Object)
++        group = self.getInstanceByText(self.fGroupDropdown.currentText(), Group)
++        department = self.getInstanceByText(self.fDepartmentDropdown.currentText(), Department)
++        subject = self.getInstanceByText(self.fSubjectDropdown.currentText(), Subject)
++        location = self.getInstanceByText(self.fLocationDropdown.currentText(), Location)
++        state = normalizeText(self.fStateDropdown.currentText())
++        responsiblePerson = self.model.getUserByUserName(self.fResponsiblePersonDropdown.currentText())
++        item = Item(object, group, department, subject, location, responsiblePerson, state)
++
++        return item
++    def getInstanceByText(self, text:str, type):
++        return type(text)
+\ No newline at end of file
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"AutoImportSettings\">\r\n    <option name=\"autoReloadType\" value=\"SELECTIVE\" />\r\n  </component>\r\n  <component name=\"ChangeListManager\">\r\n    <list default=\"true\" id=\"10e1409c-2a5a-477e-b2fc-bbdf5fdd1bd2\" name=\"Changes\" comment=\"...\">\r\n      <change afterPath=\"$PROJECT_DIR$/ui/dialogs/addItem/addItem.py\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/workspace.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/workspace.xml\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/type/itemstate.py\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/type/itemstate.py\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/ui/dialogs/addUser/addUserController.py\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/ui/dialogs/dialogBase.py\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/ui/dialogs/dialogBase.py\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/ui/pages/main/maincontroller.py\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/ui/pages/main/maincontroller.py\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/ui/pages/main/mainpage.py\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/ui/pages/main/mainpage.py\" afterDir=\"false\" />\r\n    </list>\r\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\r\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\r\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\r\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\r\n  </component>\r\n  <component name=\"EmbeddingIndexingInfo\">\r\n    <option name=\"cachedIndexableFilesCount\" value=\"39\" />\r\n    <option name=\"fileBasedEmbeddingIndicesEnabled\" value=\"true\" />\r\n  </component>\r\n  <component name=\"FileTemplateManagerImpl\">\r\n    <option name=\"RECENT_TEMPLATES\">\r\n      <list>\r\n        <option value=\"CSS File\" />\r\n        <option value=\"Python Script\" />\r\n      </list>\r\n    </option>\r\n  </component>\r\n  <component name=\"Git.Settings\">\r\n    <option name=\"PUSH_AUTO_UPDATE\" value=\"true\" />\r\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\r\n  </component>\r\n  <component name=\"GitHubPullRequestSearchHistory\">{\r\n  &quot;lastFilter&quot;: {\r\n    &quot;state&quot;: &quot;OPEN&quot;,\r\n    &quot;assignee&quot;: &quot;zPinguno&quot;\r\n  }\r\n}</component>\r\n  <component name=\"GithubPullRequestsUISettings\">{\r\n  &quot;selectedUrlAndAccountId&quot;: {\r\n    &quot;url&quot;: &quot;https://github.com/zPinguno/inventory-management.git&quot;,\r\n    &quot;accountId&quot;: &quot;5ed3fef8-c0c2-4f2f-95a6-f76e1fee36be&quot;\r\n  }\r\n}</component>\r\n  <component name=\"McpProjectServerCommands\">\r\n    <commands />\r\n    <urls />\r\n  </component>\r\n  <component name=\"ProjectColorInfo\">{\r\n  &quot;associatedIndex&quot;: 2\r\n}</component>\r\n  <component name=\"ProjectId\" id=\"39HxuVPPJ39wraGcKrGlSWpfcJl\" />\r\n  <component name=\"ProjectViewState\">\r\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\r\n    <option name=\"showLibraryContents\" value=\"true\" />\r\n  </component>\r\n  <component name=\"PropertiesComponent\"><![CDATA[{\r\n  \"keyToString\": {\r\n    \"ModuleVcsDetector.initialDetectionPerformed\": \"true\",\r\n    \"Python.loginpage.executor\": \"Debug\",\r\n    \"Python.main.executor\": \"Debug\",\r\n    \"RunOnceActivity.MCP Project settings loaded\": \"true\",\r\n    \"RunOnceActivity.ShowReadmeOnStart\": \"true\",\r\n    \"RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252\": \"true\",\r\n    \"RunOnceActivity.git.unshallow\": \"true\",\r\n    \"RunOnceActivity.typescript.service.memoryLimit.init\": \"true\",\r\n    \"ai.playground.ignore.import.keys.banner.in.settings\": \"true\",\r\n    \"dart.analysis.tool.window.visible\": \"false\",\r\n    \"git-widget-placeholder\": \"master\",\r\n    \"ignore.virus.scanning.warn.message\": \"true\",\r\n    \"list.type.of.created.stylesheet\": \"CSS\",\r\n    \"node.js.detected.package.eslint\": \"true\",\r\n    \"node.js.detected.package.tslint\": \"true\",\r\n    \"node.js.selected.package.eslint\": \"(autodetect)\",\r\n    \"node.js.selected.package.tslint\": \"(autodetect)\",\r\n    \"nodejs_package_manager_path\": \"npm\",\r\n    \"settings.editor.selected.configurable\": \"com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable\",\r\n    \"vue.rearranger.settings.migration\": \"true\"\r\n  }\r\n}]]></component>\r\n  <component name=\"RecentsManager\">\r\n    <key name=\"MoveFile.RECENT_KEYS\">\r\n      <recent name=\"C:\\Users\\benja\\PycharmProjects\\SchulInventarVerwaltung\" />\r\n    </key>\r\n  </component>\r\n  <component name=\"RunManager\">\r\n    <configuration name=\"main\" type=\"PythonConfigurationType\" factoryName=\"Python\" nameIsGenerated=\"true\">\r\n      <module name=\"SchulInventarVerwaltung\" />\r\n      <option name=\"ENV_FILES\" value=\"\" />\r\n      <option name=\"INTERPRETER_OPTIONS\" value=\"\" />\r\n      <option name=\"PARENT_ENVS\" value=\"true\" />\r\n      <envs>\r\n        <env name=\"PYTHONUNBUFFERED\" value=\"1\" />\r\n      </envs>\r\n      <option name=\"SDK_HOME\" value=\"\" />\r\n      <option name=\"WORKING_DIRECTORY\" value=\"$PROJECT_DIR$\" />\r\n      <option name=\"IS_MODULE_SDK\" value=\"true\" />\r\n      <option name=\"ADD_CONTENT_ROOTS\" value=\"true\" />\r\n      <option name=\"ADD_SOURCE_ROOTS\" value=\"true\" />\r\n      <option name=\"RUN_TOOL\" value=\"\" />\r\n      <option name=\"SCRIPT_NAME\" value=\"$PROJECT_DIR$/main.py\" />\r\n      <option name=\"PARAMETERS\" value=\"\" />\r\n      <option name=\"SHOW_COMMAND_LINE\" value=\"false\" />\r\n      <option name=\"EMULATE_TERMINAL\" value=\"false\" />\r\n      <option name=\"MODULE_MODE\" value=\"false\" />\r\n      <option name=\"REDIRECT_INPUT\" value=\"false\" />\r\n      <option name=\"INPUT_FILE\" value=\"\" />\r\n      <method v=\"2\" />\r\n    </configuration>\r\n  </component>\r\n  <component name=\"SharedIndexes\">\r\n    <attachedChunks>\r\n      <set>\r\n        <option value=\"bundled-python-sdk-f2b7a9f6281b-6e1f45a539f7-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-253.29346.142\" />\r\n      </set>\r\n    </attachedChunks>\r\n  </component>\r\n  <component name=\"TaskManager\">\r\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\r\n      <changelist id=\"10e1409c-2a5a-477e-b2fc-bbdf5fdd1bd2\" name=\"Changes\" comment=\"\" />\r\n      <created>1770367020265</created>\r\n      <option name=\"number\" value=\"Default\" />\r\n      <option name=\"presentableId\" value=\"Default\" />\r\n      <updated>1770367020265</updated>\r\n      <workItem from=\"1770367021384\" duration=\"3672000\" />\r\n      <workItem from=\"1770370787246\" duration=\"386000\" />\r\n      <workItem from=\"1770371383687\" duration=\"5389000\" />\r\n    </task>\r\n    <task id=\"LOCAL-00001\" summary=\"...\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1772281984337</created>\r\n      <option name=\"number\" value=\"00001\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00001\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1772281984337</updated>\r\n    </task>\r\n    <option name=\"localTasksCounter\" value=\"2\" />\r\n    <servers />\r\n  </component>\r\n  <component name=\"TypeScriptGeneratedFilesManager\">\r\n    <option name=\"version\" value=\"3\" />\r\n  </component>\r\n  <component name=\"Vcs.Log.Tabs.Properties\">\r\n    <option name=\"TAB_STATES\">\r\n      <map>\r\n        <entry key=\"MAIN\">\r\n          <value>\r\n            <State>\r\n              <option name=\"COLUMN_ID_WIDTH\">\r\n                <map>\r\n                  <entry key=\"Table.Default.Author.ColumnIdWidth\" value=\"74\" />\r\n                </map>\r\n              </option>\r\n              <option name=\"FILTERS\">\r\n                <map>\r\n                  <entry key=\"branch\">\r\n                    <value>\r\n                      <list>\r\n                        <option value=\"origin/master\" />\r\n                      </list>\r\n                    </value>\r\n                  </entry>\r\n                </map>\r\n              </option>\r\n            </State>\r\n          </value>\r\n        </entry>\r\n      </map>\r\n    </option>\r\n  </component>\r\n  <component name=\"VcsManagerConfiguration\">\r\n    <MESSAGE value=\"...\" />\r\n    <option name=\"LAST_COMMIT_MESSAGE\" value=\"...\" />\r\n  </component>\r\n  <component name=\"XDebuggerManager\">\r\n    <breakpoint-manager>\r\n      <default-breakpoints>\r\n        <breakpoint type=\"python-exception\">\r\n          <properties notifyOnTerminate=\"true\" exception=\"BaseException\">\r\n            <option name=\"notifyOnTerminate\" value=\"true\" />\r\n          </properties>\r\n        </breakpoint>\r\n      </default-breakpoints>\r\n    </breakpoint-manager>\r\n  </component>\r\n  <component name=\"com.intellij.coverage.CoverageDataManagerImpl\">\r\n    <SUITE FILE_PATH=\"coverage/SchulInventarVerwaltung$loginpage.coverage\" NAME=\"loginpage Coverage Results\" MODIFIED=\"1770376513926\" SOURCE_PROVIDER=\"com.intellij.coverage.DefaultCoverageFileProvider\" RUNNER=\"coverage.py\" COVERAGE_BY_TEST_ENABLED=\"false\" COVERAGE_TRACING_ENABLED=\"false\" WORKING_DIRECTORY=\"$PROJECT_DIR$/ui/pages/login\" />\r\n    <SUITE FILE_PATH=\"coverage/SchulInventarVerwaltung$main.coverage\" NAME=\"main Coverage Results\" MODIFIED=\"1770377071646\" SOURCE_PROVIDER=\"com.intellij.coverage.DefaultCoverageFileProvider\" RUNNER=\"coverage.py\" COVERAGE_BY_TEST_ENABLED=\"false\" COVERAGE_TRACING_ENABLED=\"false\" WORKING_DIRECTORY=\"$PROJECT_DIR$\" />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision ef086f9fbfb741e5bdd721534d9522efae15439b)
++++ b/.idea/workspace.xml	(date 1772287201239)
+@@ -6,12 +6,8 @@
+   <component name="ChangeListManager">
+     <list default="true" id="10e1409c-2a5a-477e-b2fc-bbdf5fdd1bd2" name="Changes" comment="...">
+       <change afterPath="$PROJECT_DIR$/ui/dialogs/addItem/addItem.py" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/type/itemstate.py" beforeDir="false" afterPath="$PROJECT_DIR$/type/itemstate.py" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/ui/dialogs/addUser/addUserController.py" beforeDir="false" />
+-      <change beforePath="$PROJECT_DIR$/ui/dialogs/dialogBase.py" beforeDir="false" afterPath="$PROJECT_DIR$/ui/dialogs/dialogBase.py" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/type/item.py" beforeDir="false" afterPath="$PROJECT_DIR$/type/item.py" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/ui/pages/main/maincontroller.py" beforeDir="false" afterPath="$PROJECT_DIR$/ui/pages/main/maincontroller.py" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/ui/pages/main/mainpage.py" beforeDir="false" afterPath="$PROJECT_DIR$/ui/pages/main/mainpage.py" afterDir="false" />
+     </list>
+     <option name="SHOW_DIALOG" value="false" />
+     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+@@ -138,7 +134,23 @@
+       <option name="project" value="LOCAL" />
+       <updated>1772281984337</updated>
+     </task>
+-    <option name="localTasksCounter" value="2" />
++    <task id="LOCAL-00002" summary="...">
++      <option name="closed" value="true" />
++      <created>1772286483939</created>
++      <option name="number" value="00002" />
++      <option name="presentableId" value="LOCAL-00002" />
++      <option name="project" value="LOCAL" />
++      <updated>1772286483939</updated>
++    </task>
++    <task id="LOCAL-00003" summary="...">
++      <option name="closed" value="true" />
++      <created>1772286494825</created>
++      <option name="number" value="00003" />
++      <option name="presentableId" value="LOCAL-00003" />
++      <option name="project" value="LOCAL" />
++      <updated>1772286494825</updated>
++    </task>
++    <option name="localTasksCounter" value="4" />
+     <servers />
+   </component>
+   <component name="TypeScriptGeneratedFilesManager">

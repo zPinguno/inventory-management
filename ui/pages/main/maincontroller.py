@@ -34,3 +34,7 @@ class MainController(PageControllerBase):
                 self.page.fFilterInput.show()
     def showAddItemDialog(self):
         dialog = AddItem(self.model)
+
+        if dialog.exec():
+            dialog
+

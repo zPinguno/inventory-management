@@ -1,3 +1,4 @@
+from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QVBoxLayout, QComboBox, QLabel, QPushButton, QWidget
 
 from model.model import Model
@@ -95,10 +96,15 @@ class AddItem(DialogBase):
         self.fLocationDropdown.clear()
         self.fLocationDropdown.addItems(model.getAllLocations())
         self.fResponsiblePersonDropdown.clear()
-        self.fResponsiblePersonDropdown.addItems(model.getAllResponsibleUser())
+        self.fResponsiblePersonDropdown.addItems(self.getResponsibleUsernames(model))
         self.fStateDropdown.clear()
         self.fStateDropdown.addItems(getAllStatesAsText())
-
+    def getResponsibleUsernames(self, model):
+        allResponsibles = model.getAllResponsibleUser()
+        responsibleList = list()
+        for user in allResponsibles:
+            responsibleList.append(user.userName)
+        return responsibleList
     def getResult(self):
         object = self.getInstanceByText(self.fObjectDropdown.currentText(), Object)
         group = self.getInstanceByText(self.fGroupDropdown.currentText(), Group)

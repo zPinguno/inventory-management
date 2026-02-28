@@ -18,13 +18,11 @@ class MainPage(PageBase):
     fTable: QTableWidget
     fAddItemButton: QPushButton
     fFilterDropDown: QComboBox
-    fFilterInput: QLineEdit
+    fFilterSearchDropDown: QComboBox
     fFilterSearchButton: QPushButton
     fFilterResetButton: QPushButton
-    fStateDropDown: QComboBox
-    fResponsiblePersonDropDown: QComboBox
     fFilterWidget = QWidget
-    fVLayout = QVBoxLayout
+    fVLayout: QVBoxLayout = None
     fFilterLabel = QLabel
     fMainFilterWidget = QWidget
     fFilterSelected = ''
@@ -39,7 +37,10 @@ class MainPage(PageBase):
         self.loadStyleSheet()
         self.createWidgets()
         self.show()
+
     def createWidgets(self):
+        if self.fVLayout is not None:
+            return
         self.fLogoutButton = createButton(self, 'Logout', x = 850, y = 6)
         self.fSwitchSiteButton = createButton(self, 'Admin Seite', x = 15, y = 6)
         self.fExportButton = createButton(self, 'Export in CSV', x = 250, y = 6)
@@ -58,15 +59,7 @@ class MainPage(PageBase):
     
         self.fFilterLabel = createText('Suche:', self.fVLayout)
         self.fFilterDropDown = createDropDownMenu(self, self.filterHeaders, self.fVLayout)
-
-        stateList = [state.value for state in ItemState]
-        self.fStateDropDown = createDropDownMenu(self, stateList, self.fVLayout)
-        self.fFilterInput = createInput(self, 'Hier eingeben.', self.fVLayout)
-        allResponsibles = self.model.getAllResponsibleUser()
-        responsibleList = list()
-        for user in allResponsibles:
-            responsibleList.append(user.userName)
-        self.fResponsiblePersonDropDown = createDropDownMenu(self, responsibleList, self.fVLayout)
+        self.fFilterSearchDropDown = createDropDownMenu(self, list(), self.fVLayout)
         self.fFilterSearchButton = createButton(self, 'Suchen', self.fVLayout )
         self.fFilterResetButton = createButton(self, 'Filter Zurücksetzen', self.fVLayout)
         self.fMainFilterWidget = QWidget(self)

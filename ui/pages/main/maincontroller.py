@@ -1,4 +1,5 @@
 from type.itemheader import ItemHeader
+from type.itemstate import ItemState, getAllStates, getAllStatesAsStrings
 from type.user import User
 
 from ui.dialogs.addItem.addItem import AddItem
@@ -9,6 +10,7 @@ from model.model import Model
 class MainController(PageControllerBase):
     page: MainPage
     model: Model
+    fDialog: AddItem
 
     def __init__(self, selectPage):
         super().__init__(selectPage)
@@ -18,27 +20,47 @@ class MainController(PageControllerBase):
 
     def initLogic(self):
         super().initLogic()
-        self.selectInputForMainPage()
         self.page.fAddItemButton.clicked.connect(self.showAddItemDialog)
         self.page.fSwitchSiteButton.clicked.connect(lambda: self.selectPage("Admin"))
+        self.page.fFilterDropDown.currentIndexChanged.connect(self.refreshFilter)
 
+    def initDialogLogic(self):
+        self.fDialog.fStateDropdown.currentIndexChanged.connect(self.onStateChanged)
 
-    def selectInputForMainPage(self):
-        self.page.fResponsiblePersonDropDown.hide()
-        self.page.fStateDropDown.hide()
-        self.page.fFilterInput.hide()
-    
-        currentFilterDropDown = self.page.fFilterDropDown.currentText()
-        match currentFilterDropDown:
-            case ItemHeader.RESPONSIBLE.value:
-                self.page.fResponsiblePersonDropDown.show()
-            case ItemHeader.STATE.value:
-                self.page.fStateDropDown.show()
-            case _:
-                self.page.fFilterInput.show()
+    def onStateChanged(self):
+        if self.fDialog.fStateDropdown.currentText() == ItemState.BORROWED.value:
+            self.fDialog.fLocationDropdown.hide()
+            self.fDialog.fLocationLabel.hide()
+        else:
+            self.fDialog.fLocationDropdown.show()
+            self.fDialog.fLocationLabel.show()
+
     def showAddItemDialog(self):
-        dialog = AddItem(self.model)
+        self.fDialog = AddItem(self.model)
+        self.initDialogLogic()
+        if self.fDialog.exec():
+            self.fDialog
 
-        if dialog.exec():
-            dialog
+    def refreshFilter(self):
+        currentFilter = self.page.fFilterDropDown.currentText()
+        searchOptions = self.getSearchOptionsForFilter(ItemHeader(currentFilter))
+        self.page.fFilterSearchDropDown.clear()
+        self.page.fFilterSearchDropDown.addItems(searchOptions)
+
+    def getSearchOptionsForFilter(self, filter: ItemHeader):
+        self.model.load()
+        match filter:
+            case ItemHeader.OBJECT:
+                return self.model.getAllObjects()
+            case ItemHeader.GROUP:
+                return self.model.getAllGroups()
+            case ItemHeader.DEPARTMENT:
+                return self.model.getAllDepartments()
+            case ItemHeader.LOCATION:
+                return self.model.getAllLocations()
+            case ItemHeader.RESPONSIBLE:
+                return self.model.getAllResponsibleUserNames()
+            case ItemHeader.STATE:
+                return getAllStatesAsStrings()
+        return list()
 

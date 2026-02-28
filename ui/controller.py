@@ -47,7 +47,6 @@ class Controller:
             case "Main":
                 self.fCurrentPage = self.fMainPageController.page
                 self.fMainPageController.showPage()
-                self.fMainPageController.page.fFilterDropDown.currentIndexChanged.connect(self.fMainPageController.selectInputForMainPage)
                 self.fMainPageController.page.fLogoutButton.clicked.connect(self.showLoginPage)
             case "Admin":
                self.fCurrentPage = self.fAdminPageController.page

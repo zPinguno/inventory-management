@@ -12,6 +12,7 @@ class ItemState(Enum):
     REQUESTED = "Angefordert"
 
 
+
 def normalizeText(text: str) -> ItemState:
     if isinstance(text, ItemState):
         return text
@@ -34,6 +35,12 @@ def getAllStates():
     for state in ItemState:
         states.append(state)
     return states
+def getAllStatesAsStrings():
+    states = list()
+    for state in ItemState:
+        states.append(state.value)
+    return states
+
 def getAllStatesAsText():
     states = list()
     for state in ItemState:

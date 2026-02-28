@@ -168,12 +168,18 @@ class Model:
         return None
     
     def getAllResponsibleUser(self):
-        responsibilityUser = []
+        responsibilUser = []
         for user in self.users:
             if UserRole.RESPONSIBLE in user.roles:
-                responsibilityUser.append(user)
-        return responsibilityUser
-    
+                responsibilUser.append(user)
+        return responsibilUser
+    def getAllResponsibleUserNames(self):
+        responsibilUser = []
+        for user in self.users:
+            if UserRole.RESPONSIBLE in user.roles:
+                responsibilUser.append(user.userName)
+        return responsibilUser
+
     def getUserByUserName(self, userName: str):
         searchedUser = []
         for user in self.users:

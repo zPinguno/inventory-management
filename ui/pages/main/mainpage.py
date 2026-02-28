@@ -10,6 +10,7 @@ from ui.widgetcreationhelper import createDropDownMenu, createInput, createTable
 
 
 class MainPage(PageBase):
+    model: Model
     fTitle: QLabel
     fHeader: QFrame
     fLogoutButton: QPushButton
@@ -30,7 +31,8 @@ class MainPage(PageBase):
     fFilterSelected = ''
     tableHeaders = [ItemHeader.OBJECT.value ,ItemHeader.GROUP.value, ItemHeader.DEPARTMENT.value, ItemHeader.SUBJECT.value, ItemHeader.LOCATION.value, ItemHeader.RESPONSIBLE.value, ItemHeader.STATE.value, 'Löschen']
     filterHeaders = [ItemHeader.OBJECT.value, ItemHeader.GROUP.value, ItemHeader.DEPARTMENT.value, ItemHeader.SUBJECT.value, ItemHeader.LOCATION.value, ItemHeader.RESPONSIBLE.value, ItemHeader.STATE.value]
-    def __init__(self):
+    def __init__(self,model):
+        self.model = model
         super().__init__()
     def initComponents(self):
         super().initComponents()
@@ -61,7 +63,7 @@ class MainPage(PageBase):
         stateList = [state.value for state in ItemState]
         self.fStateDropDown = createDropDownMenu(self, stateList, self.fVLayout)
         self.fFilterInput = createInput(self, 'Hier eingeben.', self.fVLayout)
-        allResponsibles = Model().getAllUserNamesByRole('Verantworlicher')
+        allResponsibles = self.model.getAllResponsibleUser()
         self.fResponsiblePersonDropDown = createDropDownMenu(self, allResponsibles, self.fVLayout)
         self.fFilterSearchButton = createButton(self, 'Suchen', self.fVLayout )
         self.fFilterResetButton = createButton(self, 'Filter Zurücksetzen', self.fVLayout)

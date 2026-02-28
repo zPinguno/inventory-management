@@ -9,8 +9,12 @@ class AdminPage(PageBase):
     fTitle: QLabel
     fHeader: QFrame
     fSidePanel: QFrame
-    fHeaderButton: QPushButton
-    fTable: QTableWidget
+    fUserTable: QTableWidget
+    fLocationTable: QTableWidget
+    fObjectTable: QTableWidget
+    fSubjectTable: QTableWidget
+    fGroupTable: QTableWidget
+    fDepartmentTable: QTableWidget
     fDropDownMenu: QComboBox
     fNewEntryButton: QPushButton
     fHeaderAdminButton: QPushButton
@@ -26,9 +30,13 @@ class AdminPage(PageBase):
         self.show()
     def createWidgets(self):
         self.fHeaderButton = createButton(self, 'Logout', x = 850, y = 6)
-        self.fHeaderAdminButton = createButton(self, 'Stammdaten ändern', x = 450, y = 6)
-        self.fDropDownMenu = createDropDownMenu(self, ['Nutzer', ])
-        self.fTable = createTable(self, ['Vorname', 'Nachname', 'Nutzername', 'Rolle', 'Löschen'],x = 0, y = 50)
+        self.fDropDownMenu = createDropDownMenu(self, ['Nutzer', 'Gruppe', 'Ort', 'Fach', 'Objekt'], x = 200, y = 6)
+        self.fUserTable = createTable(self, ['Vorname', 'Nachname', 'Nutzername', 'Rolle', 'Löschen'],x = 0, y = 50)
+        self.fLocationTable = createTable(self, ['Name','Löschen'],x = 0, y = 50)
+        self.fSubjectTable = createTable(self, ['Name','Löschen'],x = 0, y = 50)
+        self.fObjectTable = createTable(self, ['Name','Löschen'],x = 0, y = 50)
+        self.fGroupTable = createTable(self, ['Name','Löschen'],x = 0, y = 50)
+        self.fDepartmentTable = createTable(self, ['Name','Löschen'],x = 0, y = 50)
         self.fHeader = createHeader(
         'Admin Seite',
         1000,
@@ -38,6 +46,7 @@ class AdminPage(PageBase):
         self.prepareWidgets()
     def prepareWidgets(self):
         self.fHeaderButton.raise_()
+        self.fDropDownMenu.raise_()
         self.fAddItemButton.setFixedSize(60, 60)
     def prepareStyles(self):
         pass # Ehrlich, keine Ahnung für Styles

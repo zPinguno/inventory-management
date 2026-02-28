@@ -9,14 +9,14 @@ def createButton(page:QMainWindow | QDialog, name: str, layout:QVBoxLayout = Non
 
     return button
 
-def createDropDownMenu(page:QMainWindow | QDialog, wordList: list, layout:QVBoxLayout):
+def createDropDownMenu(page:QMainWindow | QDialog, wordList: list, layout:QVBoxLayout = None, x = 0, y = 0):
     dropDownMenu = QComboBox(page)
     dropDownMenu.addItems(wordList)
     dropDownMenu.setEditable(True)
     dropDownMenu.lineEdit().setReadOnly(True)
     dropDownMenu.lineEdit().setAlignment(Qt.AlignmentFlag.AlignHCenter)
     dropDownMenu.setMinimumHeight(22)
-    checkForPosition(dropDownMenu, layout)
+    checkForPosition(dropDownMenu, layout, x, y)
 
     return dropDownMenu
 def createInput(page:QMainWindow | QDialog , placeHolderName:str,layout:QVBoxLayout, x = None, y = None):

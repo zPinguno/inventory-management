@@ -9,4 +9,28 @@ class AdminController(PageControllerBase):
         super().__init__()
         self.page = AdminPage()
     def initLogic(self):
-        pass
+        self.checkTable()
+        self.page.fDropDownMenu.currentIndexChanged.connect(self.checkTable)
+
+    def checkTable(self):
+        self.page.fLocationTable.hide()
+        self.page.fObjectTable.hide()
+        self.page.fSubjectTable.hide()
+        self.page.fDepartmentTable.hide()
+        self.page.fGroupTable.hide()
+
+        matchingText = self.page.fDropDownMenu.currentText()
+
+        match matchingText:
+            case 'Nutzer':
+                self.page.fUserTable.show()
+            case 'Ort':
+                self.page.fLocationTable.show()
+            case 'Objekt':
+                self.page.fObjectTable.show()
+            case 'Gruppe':
+                self.page.fGroupTable.show()
+            case 'Fach':
+                self.page.fSubjectTable.show()
+            case 'Abteilung':
+                self.page.fDepartmentTable.show()

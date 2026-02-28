@@ -45,7 +45,6 @@ class Model:
             Subject TEXT,
             Location TEXT,
             ResponsiblePerson TEXT,
-            BorrowPerson TEXT,
             State TEXT
         )""")
         conn.execute("""
@@ -89,7 +88,7 @@ class Model:
             if self.items:
                 conn.executemany(
                     "INSERT INTO Items (GroupName, Department, Subject, Location, ResponsiblePerson, State) VALUES (?, ?, ?, ?, ?, ?, ?)",
-                    ((i.object.getName(), i.group.getName(), i.department.getName(), i.subject.getName(), i.location.getName(), i.responsiblePerson.userName if isinstance(i.responsiblePerson, User) else i.responsiblePerson, i.borrowPerson.userName if isinstance(i.responsiblePerson, User) else i.responsiblePerson, i.state.value if hasattr(i.state, 'value') else i.state) for i in self.items)
+                    ((i.object.getName(), i.group.getName(), i.department.getName(), i.subject.getName(), i.location.getName(), i.responsiblePerson.userName if isinstance(i.responsiblePerson, User) else i.responsiblePersonif isinstance(i.responsiblePerson, User) else i.responsiblePerson, i.state.value if hasattr(i.state, 'value') else i.state) for i in self.items)
                 )
 
             conn.execute("DELETE FROM Departments")
@@ -160,7 +159,7 @@ class Model:
                 return u
         return None
 
-    def getAllUserNamesByRole(self, userRole = UserRole.ADMIN.value or UserRole.BORROWER.value or
+    def getAllUserNamesByRole(self, userRole = UserRole.ADMIN.value or
         UserRole.RESPONSIBLE.value or UserRole.TEACHER.value):
         self.load()
         users = self.users

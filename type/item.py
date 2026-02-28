@@ -13,17 +13,15 @@ class Item:
     subject: Subject
     location: Location
     responsiblePerson: User
-    borrowPerson: User
     state: ItemState
 
-    def __init__(self,object, group,department, subject, location, responsiblePerson, borrowPerson, state):
+    def __init__(self,object, group,department, subject, location, responsiblePerson, state):
         self.object = object
         self.group = group
         self.department = department
         self.subject = subject
         self.location = location 
         self.responsiblePerson = responsiblePerson
-        self.borrowPerson = borrowPerson
         self.state = state
     def getobject(self): 
         return self.object
@@ -49,7 +47,3 @@ class Item:
         return self.responsiblePerson
     def setResponsiblePerson(self, responsiblePerson): 
         self.responsiblePerson = responsiblePerson
-    def getBorrwoPerson(self):
-        return self.borrowPerson
-    def setBorrwoPerson(self, borrowPerson): 
-        self.borrowPerson = borrowPerson

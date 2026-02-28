@@ -4,7 +4,6 @@ class UserRole(Enum):
     RESPONSIBLE = "Verantwortlicher"
     ADMIN = "Admin"
     TEACHER = "Lehrer"
-    BORROWER = "Ausleiher"
 
 def normalizeRoleText(text):
     match text:
@@ -14,8 +13,6 @@ def normalizeRoleText(text):
             return UserRole.ADMIN
         case 'Lehrer':
             return UserRole.TEACHER
-        case 'Ausleiher':
-            return UserRole.BORROWER
 
         case _:
             if isinstance(text, UserRole):

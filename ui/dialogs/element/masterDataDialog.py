@@ -22,8 +22,8 @@ class MasterDataDialog(DialogBase):
     def __init__(self, tableName:str):
         self.tableName = tableName
         super().__init__()
-        self.width = 250
-        self.height = 450
+        self.width = 140
+        self.height = 100
         self.setWindowTitle("Eintrag erstellen")
         self.setFixedSize(self.width, self.height)
 
@@ -45,5 +45,3 @@ class MasterDataDialog(DialogBase):
     def prepareWidgets(self):
         self.fCenterWidget.setLayout(self.fVLayout)
         self.fVLayout.setAlignment(Qt.AlignmentFlag.AlignCenter)
-
-        self.fCenterWidget.move(75, 0)

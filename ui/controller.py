@@ -15,23 +15,28 @@ class Controller:
     fLoginPageController: LoginController
     fMainPageController: MainController
     fAdminPageController: AdminController
+    isInitialized: bool
 
     fCurrentPage: PageBase
     def __init__(self):
+        self.isInitialized = False
+
         self.model = Model()
         self.createUsers()
         self.fLoginPageController = LoginController()
         self.fMainPageController = MainController()
         self.fAdminPageController = AdminController()
         self.showLoginPage()
+        self.isInitialized = True
 
     def showLoginPage(self):
         self.fCurrentUser = None
         self.selectPage("Login")
     
     def selectPage(self, pageName = "Main"):
-        currentController = getControllerByPage(self.fCurrentPage, self)
-        currentController.hidePage()
+        if self.isInitialized:
+            currentController = getControllerByPage(self.fCurrentPage, self)
+            currentController.hidePage()
 
 
         match pageName:

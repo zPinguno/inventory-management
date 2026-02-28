@@ -7,6 +7,7 @@ class DialogBase(QDialog):
         self.width = 400
         self.height = 400
         self.setFixedSize(self.width, self.height)
+        self.initComponents()
 
     def initComponents(self):
         pass

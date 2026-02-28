@@ -28,3 +28,14 @@ def normalizeItems(items: list) -> list:
         if not isinstance(item.state, ItemState):
             item.state = normalizeText(item.state)
     return items
+
+def getAllStates():
+    states = list()
+    for state in ItemState:
+        states.append(state)
+    return states
+def getAllStatesAsText():
+    states = list()
+    for state in ItemState:
+        states.append(state.value)
+    return states

@@ -1,21 +1,21 @@
 from type.itemheader import ItemHeader
-from ui.dialogs.addUser.addUserController import AddUserController
+
+from ui.dialogs.addItem.addItem import AddItem
 from ui.pages.main.mainpage import MainPage
 from ui.pages.pagecontrollerbase import PageControllerBase
 from model.model import Model
 
 class MainController(PageControllerBase):
     page: MainPage
-    addUserDialogController: AddUserController
+
     model: Model
     def __init__(self):
         super().__init__()
-        self.page = MainPage()
         self.model = Model()
-        self.addUserDialog = AddUserController()
+        self.page = MainPage(self.model)
     def initLogic(self):
         self.selectInputForMainPage()
-        self.page.fAddItemButton.clicked.connect(self.showAddUserDialog)
+        self.page.fAddItemButton.clicked.connect(self.showAddItemDialog)
 
 
     def selectInputForMainPage(self):
@@ -32,5 +32,5 @@ class MainController(PageControllerBase):
                 self.page.fStateDropDown.show()
             case _:
                 self.page.fFilterInput.show()
-    def showAddUserDialog(self):
-        self.addUserDialog.showDialog()
+    def showAddItemDialog(self):
+        dialog = AddItem(self.model)

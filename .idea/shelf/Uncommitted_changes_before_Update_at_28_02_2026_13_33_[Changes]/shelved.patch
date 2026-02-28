@@ -1,0 +1,36 @@
+Index: ui/dialogs/addUser/addUserController.py
+===================================================================
+diff --git a/ui/dialogs/addUser/addUserController.py b/ui/dialogs/addUser/addUserController.py
+deleted file mode 100644
+--- a/ui/dialogs/addUser/addUserController.py	(revision 1cfea9defef36c2963001866bde22313e04c863e)
++++ /dev/null	(revision 1cfea9defef36c2963001866bde22313e04c863e)
+@@ -1,12 +0,0 @@
+-from ui.dialogs.addUser.addUserDialog import AddUser
+-from ui.dialogs.dialogBaseController import DialogControllerBase
+-from model.model import Model
+-
+-class AddUserController(DialogControllerBase):
+-    dialog: AddUser
+-    model: Model
+-    def __init__(self):
+-        super().__init__()
+-        self.dialog = AddUser()
+-    def initLogic(self):
+-        pass
+\ No newline at end of file
+Index: ui/dialogs/addItem/addItem.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/ui/dialogs/addItem/addItem.py b/ui/dialogs/addItem/addItem.py
+new file mode 100644
+--- /dev/null	(date 1772281018399)
++++ b/ui/dialogs/addItem/addItem.py	(date 1772281018399)
+@@ -0,0 +1,5 @@
++from ui.dialogs.dialogBase import DialogBase
++
++
++class AddItem(DialogBase):
++    def __init__(self):
+\ No newline at end of file

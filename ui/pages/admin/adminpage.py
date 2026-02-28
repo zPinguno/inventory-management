@@ -2,7 +2,7 @@ from model.model import Model
 from ui.pages.pageBase import PageBase
 from PyQt6.QtWidgets import *
 
-from ui.widgetcreationhelper import createTable, createButton, createHeader
+from ui.widgetcreationhelper import createTable, createButton, createHeader, createDropDownMenu
 
 
 class AdminPage(PageBase):
@@ -11,6 +11,7 @@ class AdminPage(PageBase):
     fSidePanel: QFrame
     fHeaderButton: QPushButton
     fTable: QTableWidget
+    fDropDownMenu: QComboBox
     fNewEntryButton: QPushButton
     fHeaderAdminButton: QPushButton
     fAddItemButton: QPushButton
@@ -26,6 +27,7 @@ class AdminPage(PageBase):
     def createWidgets(self):
         self.fHeaderButton = createButton(self, 'Logout', x = 850, y = 6)
         self.fHeaderAdminButton = createButton(self, 'Stammdaten ändern', x = 450, y = 6)
+        self.fDropDownMenu = createDropDownMenu(self, ['Nutzer', ])
         self.fTable = createTable(self, ['Vorname', 'Nachname', 'Nutzername', 'Rolle', 'Löschen'],x = 0, y = 50)
         self.fHeader = createHeader(
         'Admin Seite',

@@ -165,7 +165,13 @@ class Model:
             if UserRole.RESPONSIBLE in user.roles:
                 responsibilityUser.append(user)
         return responsibilityUser
-
+    
+    def getUserByUserName(self, userName: str):
+        searchedUser = []
+        for user in self.users:
+            if userName in user.userName:
+                searchedUser.append(user)
+        return searchedUser
     
     def getAllDepartments(self): 
         return self.departments

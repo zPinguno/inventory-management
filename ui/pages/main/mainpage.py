@@ -61,7 +61,7 @@ class MainPage(PageBase):
         stateList = [state.value for state in ItemState]
         self.fStateDropDown = createDropDownMenu(self, stateList, self.fVLayout)
         self.fFilterInput = createInput(self, 'Hier eingeben.', self.fVLayout)
-        allResponsibles = Model().getAllUserNamesByRole('Verantworlicher')
+        allResponsibles = Model().getAllResponsibleUser()
         self.fResponsiblePersonDropDown = createDropDownMenu(self, allResponsibles, self.fVLayout)
         self.fFilterSearchButton = createButton(self, 'Suchen', self.fVLayout )
         self.fFilterResetButton = createButton(self, 'Filter Zurücksetzen', self.fVLayout)

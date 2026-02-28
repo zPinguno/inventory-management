@@ -88,8 +88,8 @@ class Model:
             if self.items:
                 conn.executemany(
                     "INSERT INTO Items (GroupName, Department, Subject, Location, ResponsiblePerson, State) VALUES (?, ?, ?, ?, ?, ?, ?)",
-                    ((i.object.getName(), i.group.getName(), i.department.getName(), i.subject.getName(), i.location.getName(), i.responsiblePerson.userName if isinstance(i.responsiblePerson, User) else i.responsiblePersonif isinstance(i.responsiblePerson, User) else i.responsiblePerson, i.state.value if hasattr(i.state, 'value') else i.state) for i in self.items)
-                )
+                    ((i.object.getName(), i.group.getName(), i.department.getName(), i.subject.getName(), i.location.getName(), i.responsiblePerson.userName if isinstance(i.responsiblePerson, User) else i.responsiblePerson if isinstance(i.responsiblePerson, User) else i.responsiblePerson, i.state.value if hasattr(i.state, 'value') else i.state) for i in self.items)
+                    )
 
             conn.execute("DELETE FROM Departments")
             if self.departments:

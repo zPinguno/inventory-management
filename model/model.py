@@ -158,35 +158,26 @@ class Model:
             if u.userName == userName and u.password == password:
                 return u
         return None
-
-    def getAllUserNamesByRole(self, userRole = UserRole.ADMIN.value or
-        UserRole.RESPONSIBLE.value or UserRole.TEACHER.value):
-        self.load()
-        users = self.users
-        responsibilityUserNames = []
-        for user in users:
-            if userRole in user.roles:
-                responsibilityUserNames.append(user.userName)
-        return responsibilityUserNames
+    
+    def getAllResponsibleUser(self):
+        responsibilityUser = []
+        for user in self.users:
+            if UserRole.RESPONSIBLE in user.roles:
+                responsibilityUser.append(user)
+        return responsibilityUser
 
     
-    def getAllSpecialItemNames(self, tableName = ItemHeader.DEPARTMENT.value or ItemHeader.SUBJECT.value or 
-        ItemHeader.OBJECT.value or ItemHeader.LOCATION.value or ItemHeader.GROUP.value): 
-        self.load()
-
-        match tableName:
-            case ItemHeader.DEPARTMENT.value:
-                table = self.departments
-            case ItemHeader.SUBJECT.value:
-                table = self.subjects
-            case ItemHeader.OBJECT.value:
-                table = self.objects
-            case ItemHeader.LOCATION.value:
-                table = self.locations
-            case ItemHeader.GROUP.value:
-                table = self.groups
+    def getAllDepartments(self): 
+        return self.departments
     
-        itemNames = []
-        for item in table:
-            itemNames.append(item.getName())
-        return itemNames
+    def getAllSubjects(self):     
+        return self.subjects
+    
+    def getAllObjects(self): 
+        return self.objects
+        
+    def getAllLocations(self): 
+        return self.locations
+    
+    def getAllGroups(self): 
+        return self.groups

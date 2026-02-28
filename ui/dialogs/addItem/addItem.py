@@ -39,16 +39,22 @@ class AddItem(DialogBase):
     def __init__(self, model:Model):
         self.model = model
         super().__init__()
+        self.width = 250
+        self.height = 450
+        self.setWindowTitle("Eintrag erstellen")
+        self.setFixedSize(self.width, self.height)
+
 
     def initComponents(self):
         super().initComponents()
         self.createWidgets()
+        self.prepareWidgets()
         self.refreshWordlist(self.model)
 
     def createWidgets(self):
         self.fVLayout = QVBoxLayout()
 
-        self.fObjectLabel = createText('Itemname', self.fVLayout)
+        self.fObjectLabel = createText('Name', self.fVLayout)
         self.fObjectDropdown = createDropDownMenu(self, list(), self.fVLayout)
 
         self.fGroupLabel = createText('Gruppe', self.fVLayout)
@@ -73,6 +79,8 @@ class AddItem(DialogBase):
 
         self.fCenterWidget = QWidget(self)
         self.fCenterWidget.setLayout(self.fVLayout)
+    def prepareWidgets(self):
+        self.fCenterWidget.move(50, 0)
 
     def refreshWordlist(self, model:Model):
         model.load()

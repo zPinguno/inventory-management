@@ -1,7 +1,9 @@
-from PyQt6.QtWidgets import QMainWindow
+from PyQt6.QtWidgets import QMainWindow, QPushButton
 
 
 class PageBase(QMainWindow):
+    fSwitchSiteButton: QPushButton
+
     def __init__(self):
         super().__init__()
         self.width = 1000

@@ -1,4 +1,5 @@
 from type.itemheader import ItemHeader
+from type.user import User
 
 from ui.dialogs.addItem.addItem import AddItem
 from ui.pages.main.mainpage import MainPage
@@ -7,19 +8,22 @@ from model.model import Model
 
 class MainController(PageControllerBase):
     page: MainPage
-
     model: Model
-    def __init__(self):
-        super().__init__()
+
+    def __init__(self, selectPage):
+        super().__init__(selectPage)
         self.model = Model()
         self.page = MainPage(self.model)
+
+
     def initLogic(self):
+        super().initLogic()
         self.selectInputForMainPage()
         self.page.fAddItemButton.clicked.connect(self.showAddItemDialog)
+        self.page.fSwitchSiteButton.clicked.connect(lambda: self.selectPage("Admin"))
 
 
     def selectInputForMainPage(self):
-    
         self.page.fResponsiblePersonDropDown.hide()
         self.page.fStateDropDown.hide()
         self.page.fFilterInput.hide()

@@ -23,9 +23,9 @@ class Controller:
 
         self.model = Model()
         self.createUsers()
-        self.fLoginPageController = LoginController()
-        self.fMainPageController = MainController()
-        self.fAdminPageController = AdminController()
+        self.fLoginPageController = LoginController(self.selectPage)
+        self.fMainPageController = MainController(self.selectPage)
+        self.fAdminPageController = AdminController(self.selectPage)
         self.showLoginPage()
         self.isInitialized = True
 
@@ -38,7 +38,6 @@ class Controller:
             currentController = getControllerByPage(self.fCurrentPage, self)
             currentController.hidePage()
 
-
         match pageName:
             case "Login":
                 self.fCurrentPage = self.fLoginPageController.page
@@ -50,27 +49,20 @@ class Controller:
                 self.fMainPageController.showPage()
                 self.fMainPageController.page.fFilterDropDown.currentIndexChanged.connect(self.fMainPageController.selectInputForMainPage)
                 self.fMainPageController.page.fLogoutButton.clicked.connect(self.showLoginPage)
-                self.adminPageButton()
             case "Admin":
                self.fCurrentPage = self.fAdminPageController.page
                self.fAdminPageController.showPage()
-
-
-
-    def adminPageButton(self):
-        if UserRole.ADMIN.value in self.fCurrentUser.roles:
-            self.fMainPageController.page.fAdminSiteButton.show()
-        else:
-            self.fMainPageController.page.fAdminSiteButton.hide()
-        self.fMainPageController.page.fAdminSiteButton.clicked.connect(lambda: self.selectPage("Admin"))
-
+    def loginUser(self, user:User):
+        self.fCurrentUser = user
+        self.fMainPageController.loginUser(user)
+        self.fAdminPageController.loginUser(user)
 
     def onLogin(self):
         username = self.fLoginPageController.page.fUserName.text()
         password = self.fLoginPageController.page.fPassword.text()
         user = self.model.login(username, self.hashPassword(password))
         if user != None:
-            self.fCurrentUser = user
+            self.loginUser(user)
             self.selectPage("Main")
         else:
             self.fLoginPageController.showLoginError()

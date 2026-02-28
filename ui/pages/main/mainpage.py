@@ -17,7 +17,6 @@ class MainPage(PageBase):
     fExportButton: QPushButton
     fTable: QTableWidget
     fAddItemButton: QPushButton
-    fAdminSiteButton: QPushButton
     fFilterDropDown: QComboBox
     fFilterInput: QLineEdit
     fFilterSearchButton: QPushButton
@@ -42,7 +41,7 @@ class MainPage(PageBase):
         self.show()
     def createWidgets(self):
         self.fLogoutButton = createButton(self, 'Logout', x = 850, y = 6)
-        self.fAdminSiteButton = createButton(self, 'Admin Seite', x = 15, y = 6)
+        self.fSwitchSiteButton = createButton(self, 'Admin Seite', x = 15, y = 6)
         self.fExportButton = createButton(self, 'Export in CSV', x = 250, y = 6)
         self.fAddItemButton = createButton(self, '+', x = self.width - 80, y = self.height - 80)
   
@@ -64,7 +63,10 @@ class MainPage(PageBase):
         self.fStateDropDown = createDropDownMenu(self, stateList, self.fVLayout)
         self.fFilterInput = createInput(self, 'Hier eingeben.', self.fVLayout)
         allResponsibles = self.model.getAllResponsibleUser()
-        self.fResponsiblePersonDropDown = createDropDownMenu(self, allResponsibles, self.fVLayout)
+        responsibleList = list()
+        for user in allResponsibles:
+            responsibleList.append(user.userName)
+        self.fResponsiblePersonDropDown = createDropDownMenu(self, responsibleList, self.fVLayout)
         self.fFilterSearchButton = createButton(self, 'Suchen', self.fVLayout )
         self.fFilterResetButton = createButton(self, 'Filter Zurücksetzen', self.fVLayout)
         self.fMainFilterWidget = QWidget(self)
@@ -78,7 +80,7 @@ class MainPage(PageBase):
         self.fVLayout.setSpacing(5)
         self.fAddItemButton.setFixedSize(60, 60)
 
-        self.fAdminSiteButton.raise_()
+        self.fSwitchSiteButton.raise_()
         self.fLogoutButton.raise_()
         self.fExportButton.raise_()
         self.fAddItemButton.raise_()

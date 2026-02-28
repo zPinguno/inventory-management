@@ -5,6 +5,8 @@ class UserRole(Enum):
     ADMIN = "Admin"
     TEACHER = "Lehrer"
 
+
+
 def normalizeRoleText(text):
     match text:
         case 'Verantwortlicher':

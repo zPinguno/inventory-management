@@ -30,6 +30,7 @@ class AdminPage(PageBase):
         self.show()
     def createWidgets(self):
         self.fHeaderButton = createButton(self, 'Logout', x = 850, y = 6)
+        self.fSwitchSiteButton = createButton(self, 'Inventar Seite', x=15, y=6)
         self.fDropDownMenu = createDropDownMenu(self, ['Nutzer', 'Gruppe', 'Ort', 'Fach', 'Objekt'], x = 200, y = 6)
         self.fUserTable = createTable(self, ['Vorname', 'Nachname', 'Nutzername', 'Rolle', 'Löschen'],x = 0, y = 50)
         self.fLocationTable = createTable(self, ['Name','Löschen'],x = 0, y = 50)
@@ -45,9 +46,12 @@ class AdminPage(PageBase):
         self.fAddItemButton = createButton(self,'+', x = self.width - 80, y = self.height - 80)
         self.prepareWidgets()
     def prepareWidgets(self):
+        self.fAddItemButton.setFixedSize(60, 60)
+
         self.fHeaderButton.raise_()
         self.fDropDownMenu.raise_()
-        self.fAddItemButton.setFixedSize(60, 60)
+        self.fSwitchSiteButton.raise_()
+
     def prepareStyles(self):
         pass # Ehrlich, keine Ahnung für Styles
 

@@ -2,10 +2,10 @@ import sqlite3
 import json
 from typing import List
 
-from type.itemstate import normalizeItems
+from type.itemstate import normalizeItems, normalizeText
 from type.user import User
 from type.item import Item
-from type.userrole import  UserRole
+from type.userrole import UserRole, normalizeRoleText
 from type.object import Object
 from type.department import Department
 from type.subject import Subject
@@ -114,7 +114,7 @@ class Model:
             self._ensure_tables(conn)
 
             cur = conn.execute("SELECT FirstName, LastName, UserName, Password, Role FROM Users ORDER BY Id")
-            self.users = [
+            users = [
                 User(
                     firstName=row[0] or "",
                     lastName=row[1] or "",
@@ -124,6 +124,7 @@ class Model:
                 )
                 for row in cur.fetchall()
             ]
+            self.users = self.normalizeUsers(users)
 
             cur = conn.execute("SELECT GroupName, Department, Subject, Location, ResponsiblePerson, State FROM Items ORDER BY Id")
             self.items = normalizeItems([
@@ -131,6 +132,13 @@ class Model:
                 for row in cur.fetchall()
             ])
 
+    def normalizeUsers(self, users: List[User]):
+        for user in users:
+            roles = list[UserRole]()
+            for role in user.roles:
+                roles.append(normalizeRoleText(role))
+            user.setRoles(roles)
+        return users
 
     def addUser(self, user: User) -> None:
         self.users.append(user)

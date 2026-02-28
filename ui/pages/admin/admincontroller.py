@@ -5,12 +5,13 @@ from model.model import Model
 class AdminController(PageControllerBase):
     page: AdminPage
     model: Model
-    def __init__(self):
-        super().__init__()
+    def __init__(self, selectPage):
+        super().__init__(selectPage)
         self.page = AdminPage()
     def initLogic(self):
         self.checkTable()
         self.page.fDropDownMenu.currentIndexChanged.connect(self.checkTable)
+        self.page.fSwitchSiteButton.clicked.connect(lambda: self.selectPage("Main"))
 
     def checkTable(self):
         self.page.fLocationTable.hide()

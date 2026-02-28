@@ -6,7 +6,16 @@
   <component name="ChangeListManager">
     <list default="true" id="10e1409c-2a5a-477e-b2fc-bbdf5fdd1bd2" name="Changes" comment="...">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ui/dialogs/addItem/addItem.py" beforeDir="false" afterPath="$PROJECT_DIR$/ui/dialogs/addItem/addItem.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/model/model.py" beforeDir="false" afterPath="$PROJECT_DIR$/model/model.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/type/user.py" beforeDir="false" afterPath="$PROJECT_DIR$/type/user.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/type/userrole.py" beforeDir="false" afterPath="$PROJECT_DIR$/type/userrole.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ui/controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/ui/controller.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ui/pages/admin/admincontroller.py" beforeDir="false" afterPath="$PROJECT_DIR$/ui/pages/admin/admincontroller.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ui/pages/admin/adminpage.py" beforeDir="false" afterPath="$PROJECT_DIR$/ui/pages/admin/adminpage.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ui/pages/main/maincontroller.py" beforeDir="false" afterPath="$PROJECT_DIR$/ui/pages/main/maincontroller.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ui/pages/main/mainpage.py" beforeDir="false" afterPath="$PROJECT_DIR$/ui/pages/main/mainpage.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ui/pages/pageBase.py" beforeDir="false" afterPath="$PROJECT_DIR$/ui/pages/pageBase.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ui/pages/pagecontrollerbase.py" beforeDir="false" afterPath="$PROJECT_DIR$/ui/pages/pagecontrollerbase.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -157,7 +166,15 @@
       <option name="project" value="LOCAL" />
       <updated>1772287337748</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="...">
+      <option name="closed" value="true" />
+      <created>1772290817604</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1772290817604</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

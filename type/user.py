@@ -31,7 +31,7 @@ class User:
         return self.password
     def setPassword(self, password):
         self.password = password
-    def setRole(self, roles):
+    def setRoles(self, roles):
         self.roles = roles
     def getRole(self):
         return self.roles

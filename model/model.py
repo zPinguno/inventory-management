@@ -2,7 +2,7 @@ import sqlite3
 import json
 from typing import List
 
-from type.itemstate import normalizeItems, normalizeText
+from type.itemstate import normalizeItems, normalizeText, ItemState
 from type.user import User
 from type.item import Item
 from type.userrole import UserRole, normalizeRoleText
@@ -87,8 +87,8 @@ class Model:
             conn.execute("DELETE FROM Items")
             if self.items:
                 conn.executemany(
-                    "INSERT INTO Items (GroupName, Department, Subject, Location, ResponsiblePerson, State) VALUES (?, ?, ?, ?, ?, ?, ?)",
-                    ((i.object.getName(), i.group.getName(), i.department.getName(), i.subject.getName(), i.location.getName(), i.responsiblePerson.userName if isinstance(i.responsiblePerson, User) else i.responsiblePerson if isinstance(i.responsiblePerson, User) else i.responsiblePerson, i.state.value if hasattr(i.state, 'value') else i.state) for i in self.items)
+                    "INSERT INTO Items (itemName, GroupName, Department, Subject, Location, ResponsiblePerson, State) VALUES (?, ?, ?, ?, ?, ?, ?)",
+                    ((i.object.getName(), i.group.getName(), i.department.getName(), i.subject.getName(), i.location.getName(), i.responsiblePerson.userName if isinstance(i.responsiblePerson, User) else i.responsiblePerson, i.state.value if hasattr(i.state, 'value') else i.state) for i in self.items)
                     )
 
             conn.execute("DELETE FROM Departments")
@@ -138,9 +138,9 @@ class Model:
             ]
             self.users = self.normalizeUsers(users)
 
-            cur = conn.execute("SELECT GroupName, Department, Subject, Location, ResponsiblePerson, State FROM Items ORDER BY Id")
+            cur = conn.execute("SELECT itemName, GroupName, Department, Subject, Location, ResponsiblePerson, State FROM Items ORDER BY Id")
             self.items = normalizeItems([
-                Item(group=row[0], department=row[1], subject=row[2], location=row[3], responsiblePerson=row[4], state=row[5] )
+                Item(obj=Object(row[0]), group=Group(row[1]), department=Department(row[2]), subject=Subject(row[3]), location=Location(row[4]), responsiblePerson=self.getUserByUserName(row[5]), state=ItemState(row[6]))
                 for row in cur.fetchall()
             ])
             cur = conn.execute("SELECT Name FROM Groups ORDER BY Id")
@@ -212,10 +212,10 @@ class Model:
         return responsibilUser
 
     def getUserByUserName(self, userName: str):
-        searchedUser = []
+        searchedUser = None
         for user in self.users:
             if userName in user.userName:
-                searchedUser.append(user)
+                searchedUser = user
         return searchedUser
     
     def getAllDepartments(self): 

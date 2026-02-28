@@ -1,0 +1,247 @@
+Index: ui/dialogs/addUser/addUserDialog.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>from model.model import Model\r\nfrom type.user import User\r\nfrom type.userrole import UserRole\r\nfrom ui.dialogs.dialogBase import DialogBase\r\nfrom PyQt6.QtWidgets import *\r\nfrom PyQt6.QtCore import Qt\r\nfrom PyQt6.QtGui import QColor\r\nfrom type.itemheader import ItemHeader\r\nfrom type.itemstate import ItemState\r\nfrom typing import List\r\n\r\nfrom ui.widgetcreationhelper import createCheckbox, createInput, createButton, createText\r\n\r\n\r\nclass AddUser(DialogBase):\r\n    fVLayout = QVBoxLayout    \r\n    fFirstNameInput: QLineEdit\r\n    fLastNameInput: QLineEdit\r\n    fUserNameInput: QLineEdit\r\n    fPasswordInput: QLineEdit\r\n    fFirstNameLabel: QLabel\r\n    fLastNameLabel: QLabel\r\n    fUserNameLabel: QLabel\r\n    fPasswordLabel: QLabel\r\n    fRoleDropDown: QComboBox\r\n    fSaveButton: QPushButton\r\n    fRoleOptions: List[QCheckBox] = []\r\n    \r\n    user: User | None\r\n\r\n    def __init__(self):\r\n        super().__init__()\r\n        self.setWindowTitle('Neuen Benutzer hinzufügen')\r\n        self.user = None\r\n        \r\n    def initComponents(self):\r\n        super().initComponents()\r\n        self.setWindowTitle('Add User')\r\n        self.loadStyleSheet()\r\n        self.createWidgets()\r\n        self.show()\r\n    def createWidgets(self):\r\n        self.fRoleOptions = []\r\n        self.fVLayout = QVBoxLayout()\r\n\r\n        self.fFirstNameLabel = createText('Vorname', self.fVLayout)\r\n        self.fFirstNameInput = createInput(self, 'Vorname', self.fVLayout)\r\n\r\n        self.fLastNameLabel = createText('Nachname', self.fVLayout)\r\n        self.fLastNameInput = createInput(self, 'Nachname', self.fVLayout)\r\n\r\n        self.fUserNameLabel = createText('Benutzername', self.fVLayout)\r\n        self.fUserNameInput = createInput(self, 'Benutzername', self.fVLayout)\r\n\r\n        self.fPasswordLabel = createText('Passwort', self.fVLayout)\r\n        self.fPasswordInput = createInput(self, 'Passwort', self.fVLayout)\r\n        \r\n        self.createAllCheckboxes()\r\n\r\n        self.fSaveButton = createButton(self, 'Speichern', self.fVLayout)\r\n\r\n        self.fCenterWidget = QWidget(self)\r\n\r\n\r\n        self.prepareWidgets()\r\n    def prepareWidgets(self):\r\n        self.fPasswordInput.setEchoMode(QLineEdit.EchoMode.Password)\r\n        self.fCenterWidget.setLayout(self.fVLayout)\r\n        self.fVLayout.setAlignment(Qt.AlignmentFlag.AlignCenter)\r\n\r\n        self.fCenterWidget.move(125, 0)\r\n    def prepareStyles(self):\r\n        pass\r\n\r\n    def createAllCheckboxes(self):\r\n        userRoleList = [member.value for member in UserRole]\r\n        for userRole in userRoleList:\r\n            self.fRoleOptions.append(createCheckbox(self, userRole, self.fVLayout))\r\n        \r\n\r\n    def loadStyleSheet(self):\r\n        styleSheet = open('./ui/dialogs/addUser/addUser.css').read()\r\n        self.setStyleSheet(styleSheet)
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/ui/dialogs/addUser/addUserDialog.py b/ui/dialogs/addUser/addUserDialog.py
+--- a/ui/dialogs/addUser/addUserDialog.py	(revision 7c17701356b042c97b9fde186044be3c4026a92a)
++++ b/ui/dialogs/addUser/addUserDialog.py	(date 1772300975536)
+@@ -35,7 +35,6 @@
+         
+     def initComponents(self):
+         super().initComponents()
+-        self.setWindowTitle('Add User')
+         self.loadStyleSheet()
+         self.createWidgets()
+         self.show()
+Index: ui/pages/admin/admincontroller.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>from ui.pages.admin.adminpage import AdminPage\r\nfrom ui.pages.pagecontrollerbase import PageControllerBase\r\nfrom model.model import Model\r\n\r\nclass AdminController(PageControllerBase):\r\n    page: AdminPage\r\n    model: Model\r\n    def __init__(self, selectPage):\r\n        super().__init__(selectPage)\r\n        self.page = AdminPage()\r\n    def initLogic(self):\r\n        self.checkTable()\r\n        self.page.fDropDownMenu.currentIndexChanged.connect(self.checkTable)\r\n        self.page.fSwitchSiteButton.clicked.connect(lambda: self.selectPage(\"Main\"))\r\n\r\n    def checkTable(self):\r\n        self.page.fLocationTable.hide()\r\n        self.page.fObjectTable.hide()\r\n        self.page.fSubjectTable.hide()\r\n        self.page.fDepartmentTable.hide()\r\n        self.page.fGroupTable.hide()\r\n\r\n        matchingText = self.page.fDropDownMenu.currentText()\r\n\r\n        match matchingText:\r\n            case 'Nutzer':\r\n                self.page.fUserTable.show()\r\n            case 'Ort':\r\n                self.page.fLocationTable.show()\r\n            case 'Objekt':\r\n                self.page.fObjectTable.show()\r\n            case 'Gruppe':\r\n                self.page.fGroupTable.show()\r\n            case 'Fach':\r\n                self.page.fSubjectTable.show()\r\n            case 'Abteilung':\r\n                self.page.fDepartmentTable.show()\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/ui/pages/admin/admincontroller.py b/ui/pages/admin/admincontroller.py
+--- a/ui/pages/admin/admincontroller.py	(revision 7c17701356b042c97b9fde186044be3c4026a92a)
++++ b/ui/pages/admin/admincontroller.py	(date 1772300975537)
+@@ -1,17 +1,48 @@
++from ui.dialogs.element.masterDataDialog import MasterDataDialog
+ from ui.pages.admin.adminpage import AdminPage
+ from ui.pages.pagecontrollerbase import PageControllerBase
+ from model.model import Model
++from type.location import Location
++from type.subject import Subject
++from type.group import Group
++from type.object import Object
++from type.department import Department
+ 
+ class AdminController(PageControllerBase):
+     page: AdminPage
+     model: Model
++    masterDataDialog: MasterDataDialog
++    databaseTable: str
+     def __init__(self, selectPage):
+         super().__init__(selectPage)
+         self.page = AdminPage()
++        self.model = Model()
+     def initLogic(self):
+         self.checkTable()
+         self.page.fDropDownMenu.currentIndexChanged.connect(self.checkTable)
+         self.page.fSwitchSiteButton.clicked.connect(lambda: self.selectPage("Main"))
++        self.page.fAddItemButton.clicked.connect(self.showDialog)
++
++    def showDialog(self):
++        self.masterDataDialog = MasterDataDialog(self.databaseTable)
++        self.masterDataDialog.show()
++        self.masterDataDialog.fSafeButton.clicked.connect(self.safeEntry)
++    
++    def safeEntry(self):
++        name = self.masterDataDialog.fNameInput.text()
++        match self.databaseTable:
++            case 'Ort':
++                self.model.addLocation(Location(name))
++            case 'Fach':
++                self.model.addSubject(Subject(name)) 
++            case 'Objekt':
++                self.model.addObject(Object(name))
++            case 'Abteilung':
++                self.model.addDepartment(Department(name))
++            case 'Gruppe':
++                self.model.addGroup(Group(name))
++        self.model.save()
++        self.masterDataDialog.hide()   
+ 
+     def checkTable(self):
+         self.page.fLocationTable.hide()
+@@ -25,13 +56,21 @@
+         match matchingText:
+             case 'Nutzer':
+                 self.page.fUserTable.show()
++                self.databaseTable = matchingText
+             case 'Ort':
+                 self.page.fLocationTable.show()
++                self.databaseTable = matchingText
+             case 'Objekt':
+                 self.page.fObjectTable.show()
++                self.databaseTable = matchingText
+             case 'Gruppe':
+                 self.page.fGroupTable.show()
++                self.databaseTable = matchingText
+             case 'Fach':
+                 self.page.fSubjectTable.show()
++                self.databaseTable = matchingText
+             case 'Abteilung':
+                 self.page.fDepartmentTable.show()
++                self.databaseTable = matchingText
++
++
+Index: model/model.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import sqlite3\r\nimport json\r\nfrom typing import List\r\n\r\nfrom type.itemstate import normalizeItems, normalizeText\r\nfrom type.user import User\r\nfrom type.item import Item\r\nfrom type.userrole import UserRole, normalizeRoleText\r\nfrom type.object import Object\r\nfrom type.department import Department\r\nfrom type.subject import Subject\r\nfrom type.group import Group\r\nfrom type.location import Location\r\nfrom type.itemheader import ItemHeader\r\n\r\n\r\nclass Model:\r\n    def __init__(self, db_path: str = \"local.db\"):\r\n        self.db_path = db_path\r\n        self.users: List[User] = []\r\n        self.items: List[Item] = []\r\n        self.objects: List[Object] = []\r\n        self.departments: List[Department] = []\r\n        self.locations: List[Location] = []\r\n        self.subjects: List[Subject] = []\r\n        self.groups: List[Group] = []\r\n        self.load()\r\n\r\n    def _ensure_tables(self, conn: sqlite3.Connection) -> None:\r\n        conn.execute(\"\"\"\r\n        CREATE TABLE IF NOT EXISTS Users (\r\n            Id INTEGER PRIMARY KEY AUTOINCREMENT,\r\n            FirstName TEXT,\r\n            LastName TEXT,\r\n            UserName TEXT UNIQUE,\r\n            Password TEXT,\r\n            Role TEXT\r\n        )\"\"\")\r\n        conn.execute(\"\"\"\r\n        CREATE TABLE IF NOT EXISTS Items (\r\n            Id INTEGER PRIMARY KEY AUTOINCREMENT,\r\n            itemName TEXT,\r\n            GroupName TEXT,\r\n            Department TEXT,\r\n            Subject TEXT,\r\n            Location TEXT,\r\n            ResponsiblePerson TEXT,\r\n            State TEXT\r\n        )\"\"\")\r\n        conn.execute(\"\"\"\r\n        CREATE TABLE IF NOT EXISTS Departments (\r\n            Id INTEGER PRIMARY KEY AUTOINCREMENT,\r\n            Name TEXT\r\n        )\"\"\")\r\n        conn.execute(\"\"\"\r\n        CREATE TABLE IF NOT EXISTS Subjects (\r\n            Id INTEGER PRIMARY KEY AUTOINCREMENT,\r\n            Name TEXT\r\n        )\"\"\")\r\n        conn.execute(\"\"\"\r\n        CREATE TABLE IF NOT EXISTS Groups (\r\n            Id INTEGER PRIMARY KEY AUTOINCREMENT,\r\n            Name TEXT\r\n        )\"\"\")\r\n        conn.execute(\"\"\"\r\n        CREATE TABLE IF NOT EXISTS Objects (\r\n            Id INTEGER PRIMARY KEY AUTOINCREMENT,\r\n            Name TEXT\r\n        )\"\"\")\r\n        conn.execute(\"\"\"\r\n        CREATE TABLE IF NOT EXISTS Locations (\r\n            Id INTEGER PRIMARY KEY AUTOINCREMENT,\r\n            Name TEXT\r\n        )\"\"\")\r\n        conn.commit()\r\n\r\n    def save(self) -> None:\r\n        with sqlite3.connect(self.db_path) as conn:\r\n            self._ensure_tables(conn)\r\n            conn.execute(\"DELETE FROM Users\")\r\n            if self.users:\r\n                conn.executemany(\r\n                    \"INSERT INTO Users (FirstName, LastName, UserName, Password, Role) VALUES (?, ?, ?, ?, ?)\",\r\n                    ((u.firstName, u.lastName, u.userName, u.password, json.dumps([e.value for e in u.roles])) for u in self.users)\r\n                )\r\n\r\n            conn.execute(\"DELETE FROM Items\")\r\n            if self.items:\r\n                conn.executemany(\r\n                    \"INSERT INTO Items (GroupName, Department, Subject, Location, ResponsiblePerson, State) VALUES (?, ?, ?, ?, ?, ?, ?)\",\r\n                    ((i.object.getName(), i.group.getName(), i.department.getName(), i.subject.getName(), i.location.getName(), i.responsiblePerson.userName if isinstance(i.responsiblePerson, User) else i.responsiblePerson if isinstance(i.responsiblePerson, User) else i.responsiblePerson, i.state.value if hasattr(i.state, 'value') else i.state) for i in self.items)\r\n                    )\r\n\r\n            conn.execute(\"DELETE FROM Departments\")\r\n            if self.departments:\r\n                conn.executemany(\r\n                    \"INSERT INTO Departments (Name) VALUES (?)\",\r\n                    ((u.getName()) for u in self.departments)\r\n                )\r\n            conn.execute(\"DELETE FROM Subjects\")\r\n            if self.departments:\r\n                conn.executemany(\r\n                    \"INSERT INTO Subjects (Name) VALUES (?)\",\r\n                    ((u.getName()) for u in self.subjects)\r\n                )\r\n            conn.execute(\"DELETE FROM Groups\")\r\n            if self.departments:\r\n                conn.executemany(\r\n                    \"INSERT INTO Groups (Name) VALUES (?)\",\r\n                    ((u.getName()) for u in self.groups)\r\n                )\r\n    def load(self) -> None:\r\n        with sqlite3.connect(self.db_path) as conn:\r\n            self._ensure_tables(conn)\r\n\r\n            cur = conn.execute(\"SELECT FirstName, LastName, UserName, Password, Role FROM Users ORDER BY Id\")\r\n            users = [\r\n                User(\r\n                    firstName=row[0] or \"\",\r\n                    lastName=row[1] or \"\",\r\n                    userName=row[2] or \"\",\r\n                    password=row[3] or \"\",\r\n                    roles= json.loads(row[4]) or \"\"\r\n                )\r\n                for row in cur.fetchall()\r\n            ]\r\n            self.users = self.normalizeUsers(users)\r\n\r\n            cur = conn.execute(\"SELECT GroupName, Department, Subject, Location, ResponsiblePerson, State FROM Items ORDER BY Id\")\r\n            self.items = normalizeItems([\r\n                Item(group=row[0], department=row[1], subject=row[2], location=row[3], responsiblePerson=row[4], state=row[5] )\r\n                for row in cur.fetchall()\r\n            ])\r\n\r\n    def normalizeUsers(self, users: List[User]):\r\n        for user in users:\r\n            roles = list[UserRole]()\r\n            for role in user.roles:\r\n                roles.append(normalizeRoleText(role))\r\n            user.setRoles(roles)\r\n        return users\r\n\r\n    def addUser(self, user: User) -> None:\r\n        self.users.append(user)\r\n\r\n    def addItem(self, item: Item) -> None:\r\n        self.items.append(item)\r\n\r\n    def addDepartment(self, department: Department) -> None:\r\n        self.departments.append(department)\r\n\r\n    def addObject(self, object: Object) -> None:\r\n        self.objects.append(object)\r\n    \r\n    def addSubject(self, subject: Subject) -> None:\r\n        self.subjects.append(subject)\r\n        \r\n    def addGroup(self, group: Group) -> None:\r\n        self.groups.append(group)\r\n    \r\n    def addLocation(self, location: Location) -> None:\r\n        self.locations.append(location)\r\n    \r\n    def login(self, userName: str, password: str) -> User | None:\r\n        for u in self.users:\r\n            if u.userName == userName and u.password == password:\r\n                return u\r\n        return None\r\n    \r\n    def getAllResponsibleUser(self):\r\n        responsibilUser = []\r\n        for user in self.users:\r\n            if UserRole.RESPONSIBLE in user.roles:\r\n                responsibilUser.append(user)\r\n        return responsibilUser\r\n    def getAllResponsibleUserNames(self):\r\n        responsibilUser = []\r\n        for user in self.users:\r\n            if UserRole.RESPONSIBLE in user.roles:\r\n                responsibilUser.append(user.userName)\r\n        return responsibilUser\r\n\r\n    def getUserByUserName(self, userName: str):\r\n        searchedUser = []\r\n        for user in self.users:\r\n            if userName in user.userName:\r\n                searchedUser.append(user)\r\n        return searchedUser\r\n    \r\n    def getAllDepartments(self): \r\n        return self.departments\r\n    \r\n    def getAllSubjects(self):     \r\n        return self.subjects\r\n    \r\n    def getAllObjects(self): \r\n        return self.objects\r\n        \r\n    def getAllLocations(self): \r\n        return self.locations\r\n    \r\n    def getAllGroups(self): \r\n        return self.groups
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/model/model.py b/model/model.py
+--- a/model/model.py	(revision 7c17701356b042c97b9fde186044be3c4026a92a)
++++ b/model/model.py	(date 1772300975535)
+@@ -23,7 +23,7 @@
+         self.departments: List[Department] = []
+         self.locations: List[Location] = []
+         self.subjects: List[Subject] = []
+-        self.groups: List[Group] = []
++        self.groups: List[Group] = list()
+         self.load()
+ 
+     def _ensure_tables(self, conn: sqlite3.Connection) -> None:
+@@ -95,19 +95,31 @@
+             if self.departments:
+                 conn.executemany(
+                     "INSERT INTO Departments (Name) VALUES (?)",
+-                    ((u.getName()) for u in self.departments)
++                    ((u.getName(),) for u in self.departments)
+                 )
+             conn.execute("DELETE FROM Subjects")
+-            if self.departments:
++            if self.subjects:
+                 conn.executemany(
+                     "INSERT INTO Subjects (Name) VALUES (?)",
+-                    ((u.getName()) for u in self.subjects)
++                    ((u.getName(),) for u in self.subjects)
+                 )
+             conn.execute("DELETE FROM Groups")
+-            if self.departments:
++            if self.groups:
+                 conn.executemany(
+                     "INSERT INTO Groups (Name) VALUES (?)",
+-                    ((u.getName()) for u in self.groups)
++                    ((u.getName(),) for u in self.groups)
++                )
++            conn.execute("DELETE FROM Objects")
++            if self.objects:
++                conn.executemany(
++                    "INSERT INTO Objects (Name) VALUES (?)",
++                    ((u.getName(),) for u in self.objects)
++                )
++            conn.execute("DELETE FROM Locations")
++            if self.locations:
++                conn.executemany(
++                    "INSERT INTO Locations (Name) VALUES (?)",
++                    ((u.getName(),) for u in self.locations)
+                 )
+     def load(self) -> None:
+         with sqlite3.connect(self.db_path) as conn:
+@@ -131,7 +143,26 @@
+                 Item(group=row[0], department=row[1], subject=row[2], location=row[3], responsiblePerson=row[4], state=row[5] )
+                 for row in cur.fetchall()
+             ])
+-
++            cur = conn.execute("SELECT Name FROM Groups ORDER BY Id")
++            self.groups = [
++                Group(name=row[0]) for row in cur.fetchall()
++            ]
++            cur = conn.execute("SELECT Name FROM Objects ORDER BY Id")
++            self.objects = [
++                Object(name=row[0]) for row in cur.fetchall()
++            ]
++            cur = conn.execute("SELECT Name FROM Subjects ORDER BY Id")
++            self.subjects = [
++                Subject(name=row[0]) for row in cur.fetchall()
++            ]
++            cur = conn.execute("SELECT Name FROM Departments ORDER BY Id")
++            self.departments = [
++                Department(name=row[0]) for row in cur.fetchall()
++            ]
++            cur = conn.execute("SELECT Name FROM Locations ORDER BY Id")
++            self.locations = [
++                Location(name=row[0]) for row in cur.fetchall()
++            ]
+     def normalizeUsers(self, users: List[User]):
+         for user in users:
+             roles = list[UserRole]()
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"AutoImportSettings\">\r\n    <option name=\"autoReloadType\" value=\"SELECTIVE\" />\r\n  </component>\r\n  <component name=\"ChangeListManager\">\r\n    <list default=\"true\" id=\"10e1409c-2a5a-477e-b2fc-bbdf5fdd1bd2\" name=\"Changes\" comment=\"many\">\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/workspace.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/workspace.xml\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/model/model.py\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/model/model.py\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/type/itemheader.py\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/type/itemheader.py\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/type/itemstate.py\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/type/itemstate.py\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/ui/controller.py\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/ui/controller.py\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/ui/dialogs/addItem/addItem.py\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/ui/dialogs/addItem/addItem.py\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/ui/pages/main/maincontroller.py\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/ui/pages/main/maincontroller.py\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/ui/pages/main/mainpage.py\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/ui/pages/main/mainpage.py\" afterDir=\"false\" />\r\n    </list>\r\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\r\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\r\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\r\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\r\n  </component>\r\n  <component name=\"EmbeddingIndexingInfo\">\r\n    <option name=\"cachedIndexableFilesCount\" value=\"39\" />\r\n    <option name=\"fileBasedEmbeddingIndicesEnabled\" value=\"true\" />\r\n  </component>\r\n  <component name=\"FileTemplateManagerImpl\">\r\n    <option name=\"RECENT_TEMPLATES\">\r\n      <list>\r\n        <option value=\"CSS File\" />\r\n        <option value=\"Python Script\" />\r\n      </list>\r\n    </option>\r\n  </component>\r\n  <component name=\"Git.Settings\">\r\n    <option name=\"PUSH_AUTO_UPDATE\" value=\"true\" />\r\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\r\n  </component>\r\n  <component name=\"GitHubPullRequestSearchHistory\">{\r\n  &quot;lastFilter&quot;: {\r\n    &quot;state&quot;: &quot;OPEN&quot;,\r\n    &quot;assignee&quot;: &quot;zPinguno&quot;\r\n  }\r\n}</component>\r\n  <component name=\"GithubPullRequestsUISettings\">{\r\n  &quot;selectedUrlAndAccountId&quot;: {\r\n    &quot;url&quot;: &quot;https://github.com/zPinguno/inventory-management.git&quot;,\r\n    &quot;accountId&quot;: &quot;5ed3fef8-c0c2-4f2f-95a6-f76e1fee36be&quot;\r\n  }\r\n}</component>\r\n  <component name=\"McpProjectServerCommands\">\r\n    <commands />\r\n    <urls />\r\n  </component>\r\n  <component name=\"ProjectColorInfo\">{\r\n  &quot;associatedIndex&quot;: 2\r\n}</component>\r\n  <component name=\"ProjectId\" id=\"39HxuVPPJ39wraGcKrGlSWpfcJl\" />\r\n  <component name=\"ProjectViewState\">\r\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\r\n    <option name=\"showLibraryContents\" value=\"true\" />\r\n  </component>\r\n  <component name=\"PropertiesComponent\">{\r\n  &quot;keyToString&quot;: {\r\n    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,\r\n    &quot;Python.loginpage.executor&quot;: &quot;Debug&quot;,\r\n    &quot;Python.main.executor&quot;: &quot;Debug&quot;,\r\n    &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,\r\n    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,\r\n    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,\r\n    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,\r\n    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,\r\n    &quot;ai.playground.ignore.import.keys.banner.in.settings&quot;: &quot;true&quot;,\r\n    &quot;dart.analysis.tool.window.visible&quot;: &quot;false&quot;,\r\n    &quot;git-widget-placeholder&quot;: &quot;master&quot;,\r\n    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,\r\n    &quot;list.type.of.created.stylesheet&quot;: &quot;CSS&quot;,\r\n    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,\r\n    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,\r\n    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,\r\n    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,\r\n    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,\r\n    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;,\r\n    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;\r\n  }\r\n}</component>\r\n  <component name=\"RecentsManager\">\r\n    <key name=\"MoveFile.RECENT_KEYS\">\r\n      <recent name=\"C:\\Users\\benja\\PycharmProjects\\SchulInventarVerwaltung\" />\r\n    </key>\r\n  </component>\r\n  <component name=\"RunManager\">\r\n    <configuration name=\"main\" type=\"PythonConfigurationType\" factoryName=\"Python\" nameIsGenerated=\"true\">\r\n      <module name=\"SchulInventarVerwaltung\" />\r\n      <option name=\"ENV_FILES\" value=\"\" />\r\n      <option name=\"INTERPRETER_OPTIONS\" value=\"\" />\r\n      <option name=\"PARENT_ENVS\" value=\"true\" />\r\n      <envs>\r\n        <env name=\"PYTHONUNBUFFERED\" value=\"1\" />\r\n      </envs>\r\n      <option name=\"SDK_HOME\" value=\"\" />\r\n      <option name=\"WORKING_DIRECTORY\" value=\"$PROJECT_DIR$\" />\r\n      <option name=\"IS_MODULE_SDK\" value=\"true\" />\r\n      <option name=\"ADD_CONTENT_ROOTS\" value=\"true\" />\r\n      <option name=\"ADD_SOURCE_ROOTS\" value=\"true\" />\r\n      <option name=\"RUN_TOOL\" value=\"\" />\r\n      <option name=\"SCRIPT_NAME\" value=\"$PROJECT_DIR$/main.py\" />\r\n      <option name=\"PARAMETERS\" value=\"\" />\r\n      <option name=\"SHOW_COMMAND_LINE\" value=\"false\" />\r\n      <option name=\"EMULATE_TERMINAL\" value=\"false\" />\r\n      <option name=\"MODULE_MODE\" value=\"false\" />\r\n      <option name=\"REDIRECT_INPUT\" value=\"false\" />\r\n      <option name=\"INPUT_FILE\" value=\"\" />\r\n      <method v=\"2\" />\r\n    </configuration>\r\n  </component>\r\n  <component name=\"SharedIndexes\">\r\n    <attachedChunks>\r\n      <set>\r\n        <option value=\"bundled-python-sdk-f2b7a9f6281b-6e1f45a539f7-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-253.29346.142\" />\r\n      </set>\r\n    </attachedChunks>\r\n  </component>\r\n  <component name=\"TaskManager\">\r\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\r\n      <changelist id=\"10e1409c-2a5a-477e-b2fc-bbdf5fdd1bd2\" name=\"Changes\" comment=\"\" />\r\n      <created>1770367020265</created>\r\n      <option name=\"number\" value=\"Default\" />\r\n      <option name=\"presentableId\" value=\"Default\" />\r\n      <updated>1770367020265</updated>\r\n      <workItem from=\"1770367021384\" duration=\"3672000\" />\r\n      <workItem from=\"1770370787246\" duration=\"386000\" />\r\n      <workItem from=\"1770371383687\" duration=\"5389000\" />\r\n    </task>\r\n    <task id=\"LOCAL-00001\" summary=\"...\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1772281984337</created>\r\n      <option name=\"number\" value=\"00001\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00001\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1772281984337</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00002\" summary=\"...\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1772286483939</created>\r\n      <option name=\"number\" value=\"00002\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00002\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1772286483939</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00003\" summary=\"...\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1772286494825</created>\r\n      <option name=\"number\" value=\"00003\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00003\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1772286494825</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00004\" summary=\"...\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1772287337748</created>\r\n      <option name=\"number\" value=\"00004\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00004\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1772287337748</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00005\" summary=\"...\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1772290817604</created>\r\n      <option name=\"number\" value=\"00005\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00005\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1772290817604</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00006\" summary=\"many\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1772293748555</created>\r\n      <option name=\"number\" value=\"00006\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00006\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1772293748555</updated>\r\n    </task>\r\n    <option name=\"localTasksCounter\" value=\"7\" />\r\n    <servers />\r\n  </component>\r\n  <component name=\"TypeScriptGeneratedFilesManager\">\r\n    <option name=\"version\" value=\"3\" />\r\n  </component>\r\n  <component name=\"Vcs.Log.Tabs.Properties\">\r\n    <option name=\"TAB_STATES\">\r\n      <map>\r\n        <entry key=\"MAIN\">\r\n          <value>\r\n            <State>\r\n              <option name=\"COLUMN_ID_WIDTH\">\r\n                <map>\r\n                  <entry key=\"Table.Default.Author.ColumnIdWidth\" value=\"74\" />\r\n                </map>\r\n              </option>\r\n              <option name=\"FILTERS\">\r\n                <map>\r\n                  <entry key=\"branch\">\r\n                    <value>\r\n                      <list>\r\n                        <option value=\"origin/master\" />\r\n                      </list>\r\n                    </value>\r\n                  </entry>\r\n                </map>\r\n              </option>\r\n            </State>\r\n          </value>\r\n        </entry>\r\n      </map>\r\n    </option>\r\n  </component>\r\n  <component name=\"VcsManagerConfiguration\">\r\n    <MESSAGE value=\"...\" />\r\n    <MESSAGE value=\"many\" />\r\n    <option name=\"LAST_COMMIT_MESSAGE\" value=\"many\" />\r\n  </component>\r\n  <component name=\"XDebuggerManager\">\r\n    <breakpoint-manager>\r\n      <default-breakpoints>\r\n        <breakpoint type=\"python-exception\">\r\n          <properties notifyOnTerminate=\"true\" exception=\"BaseException\">\r\n            <option name=\"notifyOnTerminate\" value=\"true\" />\r\n          </properties>\r\n        </breakpoint>\r\n      </default-breakpoints>\r\n    </breakpoint-manager>\r\n  </component>\r\n  <component name=\"com.intellij.coverage.CoverageDataManagerImpl\">\r\n    <SUITE FILE_PATH=\"coverage/SchulInventarVerwaltung$loginpage.coverage\" NAME=\"loginpage Coverage Results\" MODIFIED=\"1770376513926\" SOURCE_PROVIDER=\"com.intellij.coverage.DefaultCoverageFileProvider\" RUNNER=\"coverage.py\" COVERAGE_BY_TEST_ENABLED=\"false\" COVERAGE_TRACING_ENABLED=\"false\" WORKING_DIRECTORY=\"$PROJECT_DIR$/ui/pages/login\" />\r\n    <SUITE FILE_PATH=\"coverage/SchulInventarVerwaltung$main.coverage\" NAME=\"main Coverage Results\" MODIFIED=\"1770377071646\" SOURCE_PROVIDER=\"com.intellij.coverage.DefaultCoverageFileProvider\" RUNNER=\"coverage.py\" COVERAGE_BY_TEST_ENABLED=\"false\" COVERAGE_TRACING_ENABLED=\"false\" WORKING_DIRECTORY=\"$PROJECT_DIR$\" />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision 7c17701356b042c97b9fde186044be3c4026a92a)
++++ b/.idea/workspace.xml	(date 1772300070893)
+@@ -4,15 +4,8 @@
+     <option name="autoReloadType" value="SELECTIVE" />
+   </component>
+   <component name="ChangeListManager">
+-    <list default="true" id="10e1409c-2a5a-477e-b2fc-bbdf5fdd1bd2" name="Changes" comment="many">
++    <list default="true" id="10e1409c-2a5a-477e-b2fc-bbdf5fdd1bd2" name="Changes" comment="fix">
+       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/model/model.py" beforeDir="false" afterPath="$PROJECT_DIR$/model/model.py" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/type/itemheader.py" beforeDir="false" afterPath="$PROJECT_DIR$/type/itemheader.py" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/type/itemstate.py" beforeDir="false" afterPath="$PROJECT_DIR$/type/itemstate.py" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/ui/controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/ui/controller.py" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/ui/dialogs/addItem/addItem.py" beforeDir="false" afterPath="$PROJECT_DIR$/ui/dialogs/addItem/addItem.py" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/ui/pages/main/maincontroller.py" beforeDir="false" afterPath="$PROJECT_DIR$/ui/pages/main/maincontroller.py" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/ui/pages/main/mainpage.py" beforeDir="false" afterPath="$PROJECT_DIR$/ui/pages/main/mainpage.py" afterDir="false" />
+     </list>
+     <option name="SHOW_DIALOG" value="false" />
+     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+@@ -179,7 +172,15 @@
+       <option name="project" value="LOCAL" />
+       <updated>1772293748555</updated>
+     </task>
+-    <option name="localTasksCounter" value="7" />
++    <task id="LOCAL-00007" summary="fix">
++      <option name="closed" value="true" />
++      <created>1772297584844</created>
++      <option name="number" value="00007" />
++      <option name="presentableId" value="LOCAL-00007" />
++      <option name="project" value="LOCAL" />
++      <updated>1772297584844</updated>
++    </task>
++    <option name="localTasksCounter" value="8" />
+     <servers />
+   </component>
+   <component name="TypeScriptGeneratedFilesManager">
+@@ -216,10 +217,18 @@
+   <component name="VcsManagerConfiguration">
+     <MESSAGE value="..." />
+     <MESSAGE value="many" />
+-    <option name="LAST_COMMIT_MESSAGE" value="many" />
++    <MESSAGE value="fix" />
++    <option name="LAST_COMMIT_MESSAGE" value="fix" />
+   </component>
+   <component name="XDebuggerManager">
+     <breakpoint-manager>
++      <breakpoints>
++        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
++          <url>file://$PROJECT_DIR$/ui/pages/main/mainpage.py</url>
++          <line>41</line>
++          <option name="timeStamp" value="14" />
++        </line-breakpoint>
++      </breakpoints>
+       <default-breakpoints>
+         <breakpoint type="python-exception">
+           <properties notifyOnTerminate="true" exception="BaseException">

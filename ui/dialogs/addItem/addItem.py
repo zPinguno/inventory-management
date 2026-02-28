@@ -37,7 +37,8 @@ class AddItem(DialogBase):
     fStateLabel: QLabel
 
     fSaveButton: QPushButton
-    def __init__(self, model:Model):
+    def __init__(self, model:Model, getBaseDataAsStrings):
+        self.getBaseDataAsStrings = getBaseDataAsStrings
         self.model = model
         super().__init__()
         self.width = 250
@@ -86,15 +87,15 @@ class AddItem(DialogBase):
     def refreshWordlist(self, model:Model):
         model.load()
         self.fObjectDropdown.clear()
-        self.fObjectDropdown.addItems(model.getAllObjects())
+        self.fObjectDropdown.addItems(self.getBaseDataAsStrings(model.getAllObjects()))
         self.fGroupDropdown.clear()
-        self.fGroupDropdown.addItems(model.getAllGroups())
+        self.fGroupDropdown.addItems(self.getBaseDataAsStrings(model.getAllGroups()))
         self.fDepartmentDropdown.clear()
-        self.fDepartmentDropdown.addItems(model.getAllDepartments())
+        self.fDepartmentDropdown.addItems(self.getBaseDataAsStrings(model.getAllDepartments()))
         self.fSubjectDropdown.clear()
-        self.fSubjectDropdown.addItems(model.getAllSubjects())
+        self.fSubjectDropdown.addItems(self.getBaseDataAsStrings(model.getAllSubjects()))
         self.fLocationDropdown.clear()
-        self.fLocationDropdown.addItems(model.getAllLocations())
+        self.fLocationDropdown.addItems(self.getBaseDataAsStrings(model.getAllLocations()))
         self.fResponsiblePersonDropdown.clear()
         self.fResponsiblePersonDropdown.addItems(self.getResponsibleUsernames(model))
         self.fStateDropdown.clear()
@@ -113,8 +114,7 @@ class AddItem(DialogBase):
         location = self.getInstanceByText(self.fLocationDropdown.currentText(), Location)
         state = normalizeText(self.fStateDropdown.currentText())
         responsiblePerson = self.model.getUserByUserName(self.fResponsiblePersonDropdown.currentText())
-        item = Item(object, group, department, subject, location, responsiblePerson, state)
 
-        return item
+        return Item(object, group, department, subject, location, responsiblePerson, state)
     def getInstanceByText(self, text:str, type):
         return type(text)

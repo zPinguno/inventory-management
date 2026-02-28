@@ -23,7 +23,7 @@ class Model:
         self.departments: List[Department] = []
         self.locations: List[Location] = []
         self.subjects: List[Subject] = []
-        self.groups: List[Group] = []
+        self.groups: List[Group] = list()
         self.load()
 
     def _ensure_tables(self, conn: sqlite3.Connection) -> None:
@@ -95,19 +95,31 @@ class Model:
             if self.departments:
                 conn.executemany(
                     "INSERT INTO Departments (Name) VALUES (?)",
-                    ((u.getName()) for u in self.departments)
+                    ((u.getName(),) for u in self.departments)
                 )
             conn.execute("DELETE FROM Subjects")
-            if self.departments:
+            if self.subjects:
                 conn.executemany(
                     "INSERT INTO Subjects (Name) VALUES (?)",
-                    ((u.getName()) for u in self.subjects)
+                    ((u.getName(),) for u in self.subjects)
                 )
             conn.execute("DELETE FROM Groups")
-            if self.departments:
+            if self.groups:
                 conn.executemany(
                     "INSERT INTO Groups (Name) VALUES (?)",
-                    ((u.getName()) for u in self.groups)
+                    ((u.getName(),) for u in self.groups)
+                )
+            conn.execute("DELETE FROM Objects")
+            if self.objects:
+                conn.executemany(
+                    "INSERT INTO Objects (Name) VALUES (?)",
+                    ((u.getName(),) for u in self.objects)
+                )
+            conn.execute("DELETE FROM Locations")
+            if self.locations:
+                conn.executemany(
+                    "INSERT INTO Locations (Name) VALUES (?)",
+                    ((u.getName(),) for u in self.locations)
                 )
     def load(self) -> None:
         with sqlite3.connect(self.db_path) as conn:
@@ -131,7 +143,26 @@ class Model:
                 Item(group=row[0], department=row[1], subject=row[2], location=row[3], responsiblePerson=row[4], state=row[5] )
                 for row in cur.fetchall()
             ])
-
+            cur = conn.execute("SELECT Name FROM Groups ORDER BY Id")
+            self.groups = [
+                Group(name=row[0]) for row in cur.fetchall()
+            ]
+            cur = conn.execute("SELECT Name FROM Objects ORDER BY Id")
+            self.objects = [
+                Object(name=row[0]) for row in cur.fetchall()
+            ]
+            cur = conn.execute("SELECT Name FROM Subjects ORDER BY Id")
+            self.subjects = [
+                Subject(name=row[0]) for row in cur.fetchall()
+            ]
+            cur = conn.execute("SELECT Name FROM Departments ORDER BY Id")
+            self.departments = [
+                Department(name=row[0]) for row in cur.fetchall()
+            ]
+            cur = conn.execute("SELECT Name FROM Locations ORDER BY Id")
+            self.locations = [
+                Location(name=row[0]) for row in cur.fetchall()
+            ]
     def normalizeUsers(self, users: List[User]):
         for user in users:
             roles = list[UserRole]()

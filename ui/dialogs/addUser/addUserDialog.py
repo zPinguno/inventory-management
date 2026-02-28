@@ -35,7 +35,6 @@ class AddUser(DialogBase):
         
     def initComponents(self):
         super().initComponents()
-        self.setWindowTitle('Add User')
         self.loadStyleSheet()
         self.createWidgets()
         self.show()

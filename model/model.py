@@ -89,26 +89,26 @@ class Model:
             if self.items:
                 conn.executemany(
                     "INSERT INTO Items (GroupName, Department, Subject, Location, ResponsiblePerson, State) VALUES (?, ?, ?, ?, ?, ?, ?)",
-                    ((i.object, i.group, i.department, i.subject, i.location, i.responsiblePerson.userName if isinstance(i.responsiblePerson, User) else i.responsiblePerson, i.borrowPerson.userName if isinstance(i.responsiblePerson, User) else i.responsiblePerson, i.state.value if hasattr(i.state, 'value') else i.state) for i in self.items)
+                    ((i.object.getName(), i.group.getName(), i.department.getName(), i.subject.getName(), i.location.getName(), i.responsiblePerson.userName if isinstance(i.responsiblePerson, User) else i.responsiblePerson, i.borrowPerson.userName if isinstance(i.responsiblePerson, User) else i.responsiblePerson, i.state.value if hasattr(i.state, 'value') else i.state) for i in self.items)
                 )
 
             conn.execute("DELETE FROM Departments")
             if self.departments:
                 conn.executemany(
                     "INSERT INTO Departments (Name) VALUES (?)",
-                    ((u.name) for u in self.departments)
+                    ((u.getName()) for u in self.departments)
                 )
             conn.execute("DELETE FROM Subjects")
             if self.departments:
                 conn.executemany(
                     "INSERT INTO Subjects (Name) VALUES (?)",
-                    ((u.name) for u in self.subjects)
+                    ((u.getName()) for u in self.subjects)
                 )
             conn.execute("DELETE FROM Groups")
             if self.departments:
                 conn.executemany(
                     "INSERT INTO Groups (Name) VALUES (?)",
-                    ((u.name) for u in self.groups)
+                    ((u.getName()) for u in self.groups)
                 )
     def load(self) -> None:
         with sqlite3.connect(self.db_path) as conn:

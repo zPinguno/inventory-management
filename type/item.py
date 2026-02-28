@@ -1,13 +1,17 @@
 from type.itemstate import ItemState
 from type.user import User
-
+from type.object import Object
+from type.group import Group
+from type.department import Department
+from type.subject import Subject
+from type.location import Location
 
 class Item:
-    object: str
-    group: str
-    department: str
-    subject: str
-    location: str
+    object: Object
+    group: Group
+    department: Department
+    subject: Subject
+    location: Location
     responsiblePerson: User
     borrowPerson: User
     state: ItemState

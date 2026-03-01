@@ -2,7 +2,7 @@ from ast import List
 from multiprocessing.spawn import prepare
 from typing import Any
 
-from PyQt6.QtWidgets import QTableWidgetItem
+from PyQt6.QtWidgets import QTableWidgetItem, QPushButton
 
 from type.item import Item
 from type.itemheader import ItemHeader
@@ -20,6 +20,7 @@ class MainController(PageControllerBase):
     model: Model
     fDialog: AddItem
     items: list[Item]
+    currentTableItems: list[Item]
     def __init__(self, selectPage):
         super().__init__(selectPage)
         self.model = Model()
@@ -32,10 +33,18 @@ class MainController(PageControllerBase):
         self.page.fSwitchSiteButton.clicked.connect(lambda: self.selectPage("Admin"))
         self.page.fFilterDropDown.currentIndexChanged.connect(self.refreshFilter)
         self.page.fFilterSearchButton.clicked.connect(self.onSearch)
+        self.page.fTable.cellClicked.connect(self.onEdit)
         self.refreshFilter()
         self.refreshItems()
+    def onEdit(self, row, column):
+        item = self.currentTableItems[row]
+        self.showAddItemDialog(item)
+
     def onSearch(self):
-        self.refreshTableWithItems(self.prepareItemsForTable(self.getSearchParamForItems()))
+        items = self.getSearchParamForItems()
+        self.currentTableItems = items
+        self.refreshTableWithItems(self.prepareItemsForTable(items))
+
     def normalizeSearchParam(self, searchParam: Any):
         if isinstance(searchParam, ItemState):
             searchParam = searchParam.value
@@ -45,6 +54,7 @@ class MainController(PageControllerBase):
             searchParam = searchParam.getName()
 
         return searchParam
+
     def getItemsBySearchParam(self, searchParam: Any):
         items = list()
         searchFilter = self.page.fFilterDropDown.currentText()
@@ -73,6 +83,7 @@ class MainController(PageControllerBase):
                     if item.state.value == searchParam:
                         items.append(item)
         return items
+
     def getSearchParamForItems(self):
         searchFilter = self.page.fFilterDropDown.currentText()
         searchValue = self.page.fFilterSearchDropDown.currentText()
@@ -94,6 +105,7 @@ class MainController(PageControllerBase):
                 return self.getItemsBySearchParam(self.findStatesByString(searchValue))
             case _:
                 return self.items
+
     def findStatesByString(self, state: str):
         for itemState in getAllStates():
             if itemState.value == state:
@@ -107,7 +119,25 @@ class MainController(PageControllerBase):
         return None
     def initDialogLogic(self):
         self.fDialog.fStateDropdown.currentIndexChanged.connect(self.onStateChanged)
-        self.fDialog.fSaveButton.clicked.connect(self.onSaveItem)
+        if self.fDialog.item is not None:
+            self.fDialog.fSaveButton.clicked.connect(self.onSaveEditItem)
+        else:
+            self.fDialog.fSaveButton.clicked.connect(self.onSaveItem)
+    def onSaveEditItem(self):
+        oldItem = self.fDialog.item
+        newValues = self.fDialog.getResult()
+        for item in self.items:
+            if item.id == oldItem.id:
+                item.object = newValues.object
+                item.group = newValues.group
+                item.subject = newValues.subject
+                item.location = newValues.location
+                item.department = newValues.department
+                item.state = newValues.state
+                item.responsiblePerson = newValues.responsiblePerson
+        self.model.items = self.items
+        self.model.save()
+        self.refreshItems()
 
     def onStateChanged(self):
         if self.fDialog.fStateDropdown.currentText() == ItemState.BORROWED.value:
@@ -116,20 +146,29 @@ class MainController(PageControllerBase):
         else:
             self.fDialog.fLocationDropdown.show()
             self.fDialog.fLocationLabel.show()
+    
+    def showAddItemDialog(self, editItem: Item = None):
+        if not isinstance(editItem, Item):
+            editItem = None
 
-    def showAddItemDialog(self):
-        self.fDialog = AddItem(self.model, self.getBaseDataAsStrings)
+        if editItem is not None:
+            self.fDialog = AddItem(self.model, self.getBaseDataAsStrings, editItem)
+        else:
+            self.fDialog = AddItem(self.model, self.getBaseDataAsStrings)
         self.initDialogLogic()
         if self.fDialog.exec():
             return
+
     def onSaveItem(self):
         self.model.items.append(self.fDialog.getResult())
         self.model.save()
         self.refreshItems()
+        self.currentTableItems = self.items
         self.fDialog.close()
     def refreshItems(self):
         self.model.load()
         self.items = self.model.items
+        self.currentTableItems = self.items
         self.refreshTable()
     def refreshTable(self):
         preparedItems = self.prepareItemsForTable(self.items)
@@ -140,11 +179,28 @@ class MainController(PageControllerBase):
         for i in range(len(items)):
             self.page.fTable.setItem(i, 0, items[i].object)
             self.page.fTable.setItem(i, 1, items[i].group)
-            self.page.fTable.setItem(i, 2, items[i].subject)
-            self.page.fTable.setItem(i, 3, items[i].location)
-            self.page.fTable.setItem(i, 4, items[i].department)
-            self.page.fTable.setItem(i, 5, items[i].state)
-            self.page.fTable.setItem(i, 6, items[i].responsiblePerson)
+            self.page.fTable.setItem(i, 2, items[i].department)
+            self.page.fTable.setItem(i, 3, items[i].subject)
+            self.page.fTable.setItem(i, 4, items[i].location)
+            self.page.fTable.setItem(i, 5, items[i].responsiblePerson)
+            self.page.fTable.setItem(i, 6, items[i].state)
+            self.page.fTable.setCellWidget(i, 7, self.getDeleteButton(self.page.fTable))
+
+    def getDeleteButton(self,table):
+        deleteButton = QPushButton("Löschen")
+        deleteButton.clicked.connect(lambda: self.removeItemRowAtButton(deleteButton, table))
+
+        return deleteButton
+
+    def removeItemRowAtButton(self, deleteButton, table):
+        if deleteButton:
+            index = table.indexAt(deleteButton.pos())
+            if index.isValid():
+                table.removeRow(index.row())
+                self.model.items.pop(index.row())
+                self.model.save()
+        self.refreshItems()
+
 
     def prepareItemsForTable(self, items: list[Item]):
         preparedItems = list()

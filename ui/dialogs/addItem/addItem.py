@@ -1,5 +1,5 @@
 from PyQt6.QtCore import Qt
-from PyQt6.QtWidgets import QVBoxLayout, QComboBox, QLabel, QPushButton, QWidget
+from PyQt6.QtWidgets import QVBoxLayout, QComboBox, QLabel, QPushButton, QWidget, QDialog
 
 from model.model import Model
 from type.department import Department
@@ -16,6 +16,7 @@ from ui.widgetcreationhelper import createText, createButton, createDropDownMenu
 
 class AddItem(DialogBase):
     model: Model
+    item: Item
 
     fVLayout: QVBoxLayout
     fCenterWidget: QWidget
@@ -37,20 +38,35 @@ class AddItem(DialogBase):
     fStateLabel: QLabel
 
     fSaveButton: QPushButton
-    def __init__(self, model:Model, getBaseDataAsStrings):
+    def __init__(self, model:Model, getBaseDataAsStrings, item:Item = None):
+        QDialog.__init__(self)
         self.getBaseDataAsStrings = getBaseDataAsStrings
         self.model = model
-        super().__init__()
-        self.width = 195
-        self.height = 450
-        self.setWindowTitle("Eintrag erstellen")
+        self.item = item
+        self.width = 400
+        self.height = 400
         self.setFixedSize(self.width, self.height)
+        # initComponents explicitly called here instead of in DialogBase constructor
+        self.initComponents()
 
+    def selectWindowTitle(self):
+        if self.item is not None:
+            self.setWindowTitle("Eintrag bearbeiten")
+        else:
+            self.setWindowTitle("Eintrag erstellen")
 
     def initComponents(self):
         super().initComponents()
+        self.setHeight()
+        self.selectWindowTitle()
         self.createWidgets()
         self.refreshWordlist(self.model)
+        self.prefillWidgets()
+
+    def setHeight(self):
+        self.width = 195
+        self.height = 450
+        self.setFixedSize(self.width, self.height)
 
     def createWidgets(self):
         self.fVLayout = QVBoxLayout()
@@ -81,6 +97,18 @@ class AddItem(DialogBase):
         self.fCenterWidget = QWidget(self)
         self.fCenterWidget.setLayout(self.fVLayout)
 
+    def prefillWidgets(self):
+        if self.item is None:
+            return
+        self.fObjectDropdown.setCurrentText(self.item.object.getName())
+        self.fGroupDropdown.setCurrentText(self.item.group.getName())
+        self.fDepartmentDropdown.setCurrentText(self.item.department.getName())
+        self.fSubjectDropdown.setCurrentText(self.item.subject.getName())
+        self.fLocationDropdown.setCurrentText(self.item.location.getName())
+        self.fResponsiblePersonDropdown.setCurrentText(self.item.responsiblePerson.userName)
+        self.fStateDropdown.setCurrentText(self.item.state.value)
+        self.fSaveButton.setText('Speichern')
+
     def refreshWordlist(self, model:Model):
         model.load()
         self.fObjectDropdown.clear()
@@ -97,21 +125,24 @@ class AddItem(DialogBase):
         self.fResponsiblePersonDropdown.addItems(self.getResponsibleUsernames(model))
         self.fStateDropdown.clear()
         self.fStateDropdown.addItems(getAllStatesAsText())
-    def getResponsibleUsernames(self, model):
+
+    def getResponsibleUsernames(self, model:Model):
         allResponsibles = model.getAllResponsibleUser()
         responsibleList = list()
         for user in allResponsibles:
             responsibleList.append(user.userName)
         return responsibleList
+
     def getResult(self):
-        object = self.getInstanceByText(self.fObjectDropdown.currentText(), Object)
-        group = self.getInstanceByText(self.fGroupDropdown.currentText(), Group)
-        department = self.getInstanceByText(self.fDepartmentDropdown.currentText(), Department)
-        subject = self.getInstanceByText(self.fSubjectDropdown.currentText(), Subject)
-        location = self.getInstanceByText(self.fLocationDropdown.currentText(), Location)
+        object = self.model.findBaseDataByName(self.model.getAllObjects(), self.fObjectDropdown.currentText())
+        group = self.model.findBaseDataByName(self.model.getAllGroups(), self.fGroupDropdown.currentText())
+        department = self.model.findBaseDataByName(self.model.getAllDepartments(), self.fDepartmentDropdown.currentText())
+        subject = self.model.findBaseDataByName(self.model.getAllSubjects(), self.fSubjectDropdown.currentText())
+        location = self.model.findBaseDataByName(self.model.getAllLocations(), self.fLocationDropdown.currentText())
         state = normalizeText(self.fStateDropdown.currentText())
         responsiblePerson = self.model.getUserByUserName(self.fResponsiblePersonDropdown.currentText())
 
         return Item(object, group, department, subject, location, responsiblePerson, state)
+
     def getInstanceByText(self, text:str, type):
         return type(text)

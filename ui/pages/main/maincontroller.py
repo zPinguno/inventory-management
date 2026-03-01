@@ -36,7 +36,7 @@ class MainController(PageControllerBase):
         self.page.fTable.cellClicked.connect(self.onEdit)
         self.refreshFilter()
         self.refreshItems()
-    def onEdit(self, row, column):
+    def onEdit(self, row):
         item = self.currentTableItems[row]
         self.showAddItemDialog(item)
 
@@ -138,6 +138,7 @@ class MainController(PageControllerBase):
         self.model.items = self.items
         self.model.save()
         self.refreshItems()
+        self.fDialog.close()
 
     def onStateChanged(self):
         if self.fDialog.fStateDropdown.currentText() == ItemState.BORROWED.value:

@@ -4,12 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="10e1409c-2a5a-477e-b2fc-bbdf5fdd1bd2" name="Changes" comment="fix">
-      <change afterPath="$PROJECT_DIR$/type/tableitem.py" afterDir="false" />
+    <list default="true" id="10e1409c-2a5a-477e-b2fc-bbdf5fdd1bd2" name="Changes" comment="added ability too add items">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/local.db" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/model/model.py" beforeDir="false" afterPath="$PROJECT_DIR$/model/model.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ui/dialogs/addItem/addItem.py" beforeDir="false" afterPath="$PROJECT_DIR$/ui/dialogs/addItem/addItem.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ui/pages/main/maincontroller.py" beforeDir="false" afterPath="$PROJECT_DIR$/ui/pages/main/maincontroller.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -18,7 +14,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="EmbeddingIndexingInfo">
-    <option name="cachedIndexableFilesCount" value="56" />
+    <option name="cachedIndexableFilesCount" value="57" />
     <option name="fileBasedEmbeddingIndicesEnabled" value="true" />
   </component>
   <component name="FileTemplateManagerImpl">
@@ -177,7 +173,15 @@
       <option name="project" value="LOCAL" />
       <updated>1772293748555</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="added ability too add items">
+      <option name="closed" value="true" />
+      <created>1772306394541</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1772306394541</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -214,10 +218,23 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="..." />
     <MESSAGE value="many" />
-    <option name="LAST_COMMIT_MESSAGE" value="many" />
+    <MESSAGE value="added ability too add items" />
+    <option name="LAST_COMMIT_MESSAGE" value="added ability too add items" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/ui/pages/main/maincontroller.py</url>
+          <line>42</line>
+          <option name="timeStamp" value="5" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/ui/pages/main/maincontroller.py</url>
+          <line>95</line>
+          <option name="timeStamp" value="6" />
+        </line-breakpoint>
+      </breakpoints>
       <default-breakpoints>
         <breakpoint type="python-exception">
           <properties notifyOnTerminate="true" exception="BaseException">

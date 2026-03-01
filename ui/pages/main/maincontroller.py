@@ -4,6 +4,7 @@ from typing import Any
 
 from PyQt6.QtWidgets import QTableWidgetItem
 
+from type.item import Item
 from type.itemheader import ItemHeader
 from type.itemstate import ItemState, getAllStates, getAllStatesAsStrings
 from type.tableitem import TableItem
@@ -18,7 +19,7 @@ class MainController(PageControllerBase):
     page: MainPage
     model: Model
     fDialog: AddItem
-
+    items: list[Item]
     def __init__(self, selectPage):
         super().__init__(selectPage)
         self.model = Model()
@@ -30,9 +31,74 @@ class MainController(PageControllerBase):
         self.page.fAddItemButton.clicked.connect(self.showAddItemDialog)
         self.page.fSwitchSiteButton.clicked.connect(lambda: self.selectPage("Admin"))
         self.page.fFilterDropDown.currentIndexChanged.connect(self.refreshFilter)
+        self.page.fFilterSearchButton.clicked.connect(self.onSearch)
         self.refreshFilter()
         self.refreshItems()
+    def onSearch(self):
+        self.refreshTableWithItems(self.prepareItemsForTable(self.getSearchParamForItems()))
+    def getItemsBySearchParam(self, searchParam: Any):
+        items = list()
+        searchFilter = self.page.fFilterDropDown.currentText()
 
+        if not isinstance(searchParam, str):
+            searchParam = searchParam.getName()
+
+        for item in self.items:
+            match searchFilter:
+                case ItemHeader.OBJECT.value:
+                    if item.object.getName() == searchParam:
+                        items.append(item)
+                case ItemHeader.GROUP.value:
+                    if item.group.getName() == searchParam:
+                        items.append(item)
+                case ItemHeader.DEPARTMENT.value:
+                    if item.department.getName() == searchParam:
+                        items.append(item)
+                case ItemHeader.SUBJECT.value:
+                    if item.subject.getName() == searchParam:
+                        items.append(item)
+                case ItemHeader.LOCATION.value:
+                    if item.location.getName() == searchParam:
+                        items.append(item)
+                case ItemHeader.RESPONSIBLE.value:
+                    if item.responsiblePerson.getUserName() == searchParam:
+                        items.append(item)
+                case ItemHeader.STATE.value:
+                    if item.state == searchParam:
+                        items.append(item)
+        return items
+    def getSearchParamForItems(self):
+        searchFilter = self.page.fFilterDropDown.currentText()
+        searchValue = self.page.fFilterSearchDropDown.currentText()
+
+        match searchFilter:
+            case ItemHeader.OBJECT.value:
+                return self.getItemsBySearchParam(self.findBaseDataByString(self.model.getAllObjects(), searchValue))
+            case ItemHeader.GROUP.value:
+                return self.getItemsBySearchParam(self.findBaseDataByString(self.model.getAllGroups(), searchValue))
+            case ItemHeader.DEPARTMENT.value:
+                return self.getItemsBySearchParam(self.findBaseDataByString(self.model.getAllDepartments(), searchValue))
+            case ItemHeader.LOCATION.value:
+                return self.getItemsBySearchParam(self.findBaseDataByString(self.model.getAllLocations(), searchValue))
+            case ItemHeader.RESPONSIBLE.value:
+                return self.getItemsBySearchParam(self.model.getUserByUserName(searchValue))
+            case ItemHeader.SUBJECT.value:
+                return self.getItemsBySearchParam(self.findBaseDataByString(self.model.getAllSubjects(), searchValue))
+            case ItemHeader.STATE.value:
+                return self.getItemsBySearchParam(self.findStatesByString(searchValue))
+            case _:
+                return self.items
+    def findStatesByString(self, state: str):
+        for itemState in getAllStates():
+            if itemState.value == state:
+                return itemState
+        return ItemState.USED
+
+    def findBaseDataByString(self, baseDataList: list[Any], searchValue: str):
+        for baseData in baseDataList:
+            if searchValue in baseData.name:
+                return baseData
+        return None
     def initDialogLogic(self):
         self.fDialog.fStateDropdown.currentIndexChanged.connect(self.onStateChanged)
         self.fDialog.fSaveButton.clicked.connect(self.onSaveItem)
@@ -60,20 +126,23 @@ class MainController(PageControllerBase):
         self.items = self.model.items
         self.refreshTable()
     def refreshTable(self):
-        preparedItems = self.prepareItemsForTable()
-        self.page.fTable.setRowCount(len(preparedItems))
-        for i in range(len(preparedItems)):
-            self.page.fTable.setItem(i, 0, preparedItems[i].object)
-            self.page.fTable.setItem(i, 1, preparedItems[i].group)
-            self.page.fTable.setItem(i, 2, preparedItems[i].subject)
-            self.page.fTable.setItem(i, 3, preparedItems[i].location)
-            self.page.fTable.setItem(i, 4, preparedItems[i].department)
-            self.page.fTable.setItem(i, 5, preparedItems[i].state)
-            self.page.fTable.setItem(i, 6, preparedItems[i].responsiblePerson)
+        preparedItems = self.prepareItemsForTable(self.items)
+        self.refreshTableWithItems(preparedItems)
 
-    def prepareItemsForTable(self):
+    def refreshTableWithItems(self, items: list[QTableWidgetItem]):
+        self.page.fTable.setRowCount(len(items))
+        for i in range(len(items)):
+            self.page.fTable.setItem(i, 0, items[i].object)
+            self.page.fTable.setItem(i, 1, items[i].group)
+            self.page.fTable.setItem(i, 2, items[i].subject)
+            self.page.fTable.setItem(i, 3, items[i].location)
+            self.page.fTable.setItem(i, 4, items[i].department)
+            self.page.fTable.setItem(i, 5, items[i].state)
+            self.page.fTable.setItem(i, 6, items[i].responsiblePerson)
+
+    def prepareItemsForTable(self, items: list[Item]):
         preparedItems = list()
-        for item in self.items:
+        for item in items:
             object = QTableWidgetItem(item.object.getName())
             group = QTableWidgetItem(item.group.getName())
             subject = QTableWidgetItem(item.subject.getName())

@@ -125,44 +125,45 @@ class Model:
         with sqlite3.connect(self.db_path) as conn:
             self._ensure_tables(conn)
 
-            cur = conn.execute("SELECT FirstName, LastName, UserName, Password, Role FROM Users ORDER BY Id")
+            cur = conn.execute("SELECT Id, FirstName, LastName, UserName, Password, Role FROM Users ORDER BY Id")
             users = [
                 User(
-                    firstName=row[0] or "",
-                    lastName=row[1] or "",
-                    userName=row[2] or "",
-                    password=row[3] or "",
-                    roles= json.loads(row[4]) or ""
+                    id=row[0],
+                    firstName=row[1] or "",
+                    lastName=row[2] or "",
+                    userName=row[3] or "",
+                    password=row[4] or "",
+                    roles= json.loads(row[5]) or ""
                 )
                 for row in cur.fetchall()
             ]
             self.users = self.normalizeUsers(users)
 
-            cur = conn.execute("SELECT itemName, GroupName, Department, Subject, Location, ResponsiblePerson, State FROM Items ORDER BY Id")
+            cur = conn.execute("SELECT * FROM Groups ORDER BY Id")
+            self.groups = [
+                Group(id=row[0], name=row[1]) for row in cur.fetchall()
+            ]
+            cur = conn.execute("SELECT ID, Name FROM Objects ORDER BY Id")
+            self.objects = [
+                Object(id=row[0], name=row[1]) for row in cur.fetchall()
+            ]
+            cur = conn.execute("SELECT ID, Name FROM Subjects ORDER BY Id")
+            self.subjects = [
+                Subject(id=row[0], name=row[1]) for row in cur.fetchall()
+            ]
+            cur = conn.execute("SELECT ID, Name FROM Departments ORDER BY Id")
+            self.departments = [
+                Department(id=row[0], name=row[1]) for row in cur.fetchall()
+            ]
+            cur = conn.execute("SELECT ID, Name FROM Locations ORDER BY Id")
+            self.locations = [
+                Location(id=row[0], name=row[1]) for row in cur.fetchall()
+            ]
+            cur = conn.execute("SELECT ID, itemName, GroupName, Department, Subject, Location, ResponsiblePerson, State FROM Items ORDER BY Id")
             self.items = normalizeItems([
-                Item(obj=Object(row[0]), group=Group(row[1]), department=Department(row[2]), subject=Subject(row[3]), location=Location(row[4]), responsiblePerson=self.getUserByUserName(row[5]), state=ItemState(row[6]))
+                Item(id=row[0], obj=self.findBaseDataByName(self.objects, row[1]), group=self.findBaseDataByName(self.groups, row[2]), department=self.findBaseDataByName(self.departments, row[3]), subject=self.findBaseDataByName(self.subjects, row[4]), location=self.findBaseDataByName(self.locations, row[5]), responsiblePerson=self.getUserByUserName(row[6]), state=ItemState(row[7]))
                 for row in cur.fetchall()
             ])
-            cur = conn.execute("SELECT Name FROM Groups ORDER BY Id")
-            self.groups = [
-                Group(name=row[0]) for row in cur.fetchall()
-            ]
-            cur = conn.execute("SELECT Name FROM Objects ORDER BY Id")
-            self.objects = [
-                Object(name=row[0]) for row in cur.fetchall()
-            ]
-            cur = conn.execute("SELECT Name FROM Subjects ORDER BY Id")
-            self.subjects = [
-                Subject(name=row[0]) for row in cur.fetchall()
-            ]
-            cur = conn.execute("SELECT Name FROM Departments ORDER BY Id")
-            self.departments = [
-                Department(name=row[0]) for row in cur.fetchall()
-            ]
-            cur = conn.execute("SELECT Name FROM Locations ORDER BY Id")
-            self.locations = [
-                Location(name=row[0]) for row in cur.fetchall()
-            ]
     def normalizeUsers(self, users: List[User]):
         for user in users:
             roles = list[UserRole]()
@@ -212,12 +213,14 @@ class Model:
         return responsibilUser
 
     def getUserByUserName(self, userName: str):
-        searchedUser = None
         for user in self.users:
             if userName in user.userName:
-                searchedUser = user
-        return searchedUser
-    
+                return user
+    def findBaseDataByName(self, dataList: list, searchName: str):
+        for item in dataList:
+            if searchName in item.name:
+                return item
+
     def getAllDepartments(self): 
         return self.departments
     

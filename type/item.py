@@ -7,6 +7,7 @@ from type.subject import Subject
 from type.location import Location
 
 class Item:
+    id: int
     object: Object
     group: Group
     department: Department
@@ -15,7 +16,7 @@ class Item:
     responsiblePerson: User
     state: ItemState
 
-    def __init__(self, obj:Object, group:Group, department:Department, subject:Subject, location:Location, responsiblePerson:User, state:ItemState):
+    def __init__(self, obj:Object, group:Group, department:Department, subject:Subject, location:Location, responsiblePerson:User, state:ItemState, id = None):
         self.object = obj
         self.group = group
         self.department = department
@@ -23,6 +24,8 @@ class Item:
         self.location = location 
         self.responsiblePerson = responsiblePerson
         self.state = state
+        if id != None:
+            self.id = id
     def getobject(self): 
         return self.object
     def setobject(self, item): 

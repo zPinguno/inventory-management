@@ -2,18 +2,21 @@ from type.userrole import UserRole
 
 
 class User:
+    id: int
     firstName: str
     lastName: str
     userName: str
     password: str
     roles: list[UserRole]
 
-    def __init__(self,firstName, lastName, userName, password, roles):
+    def __init__(self,firstName, lastName, userName, password, roles, id = None):
         self.firstName = firstName
         self.lastName = lastName
         self.userName = userName
         self.password = password
         self.roles = roles
+        if id != None:
+            self.id = id
 
     def getFirstName(self):
         return self.firstName

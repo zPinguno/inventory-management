@@ -31,7 +31,7 @@ class AdminPage(PageBase):
     def createWidgets(self):
         self.fHeaderButton = createButton(self, 'Logout', x = 850, y = 6)
         self.fSwitchSiteButton = createButton(self, 'Inventar Seite', x=15, y=6)
-        self.fDropDownMenu = createDropDownMenu(self, ['Nutzer', 'Gruppe', 'Ort', 'Fach', 'Objekt', 'Abteilung'], x = 200, y = 6)
+        self.fDropDownMenu = createDropDownMenu(self, ['Nutzer', 'Gruppe', 'Ort', 'Fach', 'Objekt', 'Abteilung'], x = 500, y = 6)
         self.fUserTable = createTable(self, ['Vorname', 'Nachname', 'Nutzername', 'Rolle', 'Löschen'],x = 0, y = 50)
         self.fLocationTable = createTable(self, ['Name','Löschen'],x = 0, y = 50)
         self.fSubjectTable = createTable(self, ['Name','Löschen'],x = 0, y = 50)
@@ -47,6 +47,14 @@ class AdminPage(PageBase):
         self.prepareWidgets()
     def prepareWidgets(self):
         self.fAddItemButton.setFixedSize(60, 60)
+
+        self.fUserTable.move(500, 50)
+        self.fLocationTable.move(500, 50)
+        self.fSubjectTable.move(500, 50)
+        self.fObjectTable.move(500, 50)
+        self.fGroupTable.move(500, 50)
+        self.fDepartmentTable.move(500, 50)
+
 
         self.fHeaderButton.raise_()
         self.fDropDownMenu.raise_()

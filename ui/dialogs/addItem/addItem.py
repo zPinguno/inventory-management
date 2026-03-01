@@ -41,7 +41,7 @@ class AddItem(DialogBase):
         self.getBaseDataAsStrings = getBaseDataAsStrings
         self.model = model
         super().__init__()
-        self.width = 250
+        self.width = 195
         self.height = 450
         self.setWindowTitle("Eintrag erstellen")
         self.setFixedSize(self.width, self.height)
@@ -50,7 +50,6 @@ class AddItem(DialogBase):
     def initComponents(self):
         super().initComponents()
         self.createWidgets()
-        self.prepareWidgets()
         self.refreshWordlist(self.model)
 
     def createWidgets(self):
@@ -81,8 +80,6 @@ class AddItem(DialogBase):
 
         self.fCenterWidget = QWidget(self)
         self.fCenterWidget.setLayout(self.fVLayout)
-    def prepareWidgets(self):
-        self.fCenterWidget.move(50, 0)
 
     def refreshWordlist(self, model:Model):
         model.load()

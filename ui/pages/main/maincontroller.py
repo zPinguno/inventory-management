@@ -36,9 +36,7 @@ class MainController(PageControllerBase):
         self.refreshItems()
     def onSearch(self):
         self.refreshTableWithItems(self.prepareItemsForTable(self.getSearchParamForItems()))
-    def getItemsBySearchParam(self, searchParam: Any):
-        items = list()
-        searchFilter = self.page.fFilterDropDown.currentText()
+    def normalizeSearchParam(self, searchParam: Any):
         if isinstance(searchParam, ItemState):
             searchParam = searchParam.value
         if isinstance(searchParam, User):
@@ -46,6 +44,11 @@ class MainController(PageControllerBase):
         if not isinstance(searchParam, str):
             searchParam = searchParam.getName()
 
+        return searchParam
+    def getItemsBySearchParam(self, searchParam: Any):
+        items = list()
+        searchFilter = self.page.fFilterDropDown.currentText()
+        searchParam = self.normalizeSearchParam(searchParam)
         for item in self.items:
             match searchFilter:
                 case ItemHeader.OBJECT.value:

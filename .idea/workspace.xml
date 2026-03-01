@@ -4,10 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="10e1409c-2a5a-477e-b2fc-bbdf5fdd1bd2" name="Changes" comment="added ability too add items">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ui/pages/main/maincontroller.py" beforeDir="false" afterPath="$PROJECT_DIR$/ui/pages/main/maincontroller.py" afterDir="false" />
-    </list>
+    <list default="true" id="10e1409c-2a5a-477e-b2fc-bbdf5fdd1bd2" name="Changes" comment="added filter funciton" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -181,7 +178,15 @@
       <option name="project" value="LOCAL" />
       <updated>1772306394541</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="added filter funciton">
+      <option name="closed" value="true" />
+      <created>1772363819209</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1772363819209</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -219,22 +224,11 @@
     <MESSAGE value="..." />
     <MESSAGE value="many" />
     <MESSAGE value="added ability too add items" />
-    <option name="LAST_COMMIT_MESSAGE" value="added ability too add items" />
+    <MESSAGE value="added filter funciton" />
+    <option name="LAST_COMMIT_MESSAGE" value="added filter funciton" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/ui/pages/main/maincontroller.py</url>
-          <line>42</line>
-          <option name="timeStamp" value="5" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/ui/pages/main/maincontroller.py</url>
-          <line>95</line>
-          <option name="timeStamp" value="6" />
-        </line-breakpoint>
-      </breakpoints>
       <default-breakpoints>
         <breakpoint type="python-exception">
           <properties notifyOnTerminate="true" exception="BaseException">

@@ -39,7 +39,10 @@ class MainController(PageControllerBase):
     def getItemsBySearchParam(self, searchParam: Any):
         items = list()
         searchFilter = self.page.fFilterDropDown.currentText()
-
+        if isinstance(searchParam, ItemState):
+            searchParam = searchParam.value
+        if isinstance(searchParam, User):
+            searchParam = searchParam.userName
         if not isinstance(searchParam, str):
             searchParam = searchParam.getName()
 
@@ -64,7 +67,7 @@ class MainController(PageControllerBase):
                     if item.responsiblePerson.getUserName() == searchParam:
                         items.append(item)
                 case ItemHeader.STATE.value:
-                    if item.state == searchParam:
+                    if item.state.value == searchParam:
                         items.append(item)
         return items
     def getSearchParamForItems(self):

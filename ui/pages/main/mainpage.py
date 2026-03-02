@@ -47,7 +47,7 @@ class MainPage(PageBase):
         self.fAddItemButton = createButton(self, '+', x = self.width - 80, y = self.height - 80)
   
         self.fVLayout = QVBoxLayout()
-        distanceSidePanel = 200
+        distanceSidePanel = 180
 
         self.fTable = createTable(self, self.tableHeaders ,x = distanceSidePanel, y = 50, width = 850)
         self.fHeader = createHeader(
@@ -69,7 +69,7 @@ class MainPage(PageBase):
         self.fTable.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
         self.fMainFilterWidget.move(0, 200)
         self.fMainFilterWidget.setLayout(self.fVLayout)
-        self.fMainFilterWidget.setFixedSize(200, 130)
+        self.fMainFilterWidget.setFixedSize(180, 140)
         self.fVLayout.setSpacing(5)
         self.fAddItemButton.setFixedSize(60, 60)
 

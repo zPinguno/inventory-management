@@ -16,7 +16,7 @@ class MasterDataDialog(DialogBase):
     fVLayout: QVBoxLayout
     tableName: str 
     fNameInput: QLineEdit
-    fSafeButton: QPushButton
+    fSaveButton: QPushButton
     fCenterWidget: QWidget
 
     def __init__(self, tableName:str):
@@ -37,7 +37,7 @@ class MasterDataDialog(DialogBase):
         self.fVLayout = QVBoxLayout()
         createText(f'Eintrag für {self.tableName}', self.fVLayout)
         self.fNameInput = createInput(self, 'Hier Eintippen', self.fVLayout)
-        self.fSafeButton = createButton(self, 'Speichern', self.fVLayout)
+        self.fSaveButton = createButton(self, 'Speichern', self.fVLayout)
         self.fCenterWidget = QWidget(self)
 
 

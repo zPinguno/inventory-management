@@ -1,13 +1,8 @@
-from model.model import Model
 from type.user import User
 from type.userrole import UserRole
 from ui.dialogs.dialogBase import DialogBase
 from PyQt6.QtWidgets import *
 from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QColor
-from type.itemheader import ItemHeader
-from type.itemstate import ItemState
-from typing import List
 
 from ui.widgetcreationhelper import createCheckbox, createInput, createButton, createText
 
@@ -24,14 +19,19 @@ class AddUser(DialogBase):
     fPasswordLabel: QLabel
     fRoleDropDown: QComboBox
     fSaveButton: QPushButton
-    fRoleOptions: List[QCheckBox] = []
+    fAdminCheckbox: QCheckBox
+    fResponsiblePersonCheckbox: QCheckBox
+    fTeacherCheckbox: QCheckBox
     
     user: User | None
 
     def __init__(self):
         super().__init__()
-        self.setWindowTitle('Neuen Benutzer hinzufügen')
         self.user = None
+        self.width = 140
+        self.height = 350
+        self.setWindowTitle("Neuen Benutzer hinzufügen")
+        self.setFixedSize(self.width, self.height)
         
     def initComponents(self):
         super().initComponents()
@@ -54,7 +54,9 @@ class AddUser(DialogBase):
         self.fPasswordLabel = createText('Passwort', self.fVLayout)
         self.fPasswordInput = createInput(self, 'Passwort', self.fVLayout)
         
-        self.createAllCheckboxes()
+        self.fAdminCheckbox = createCheckbox(self, UserRole.ADMIN.value, self.fVLayout)
+        self.fResponsiblePersonCheckbox = createCheckbox(self, UserRole.RESPONSIBLE.value, self.fVLayout)
+        self.fTeacherCheckbox = createCheckbox(self, UserRole.TEACHER.value, self.fVLayout)
 
         self.fSaveButton = createButton(self, 'Speichern', self.fVLayout)
 
@@ -66,15 +68,8 @@ class AddUser(DialogBase):
         self.fPasswordInput.setEchoMode(QLineEdit.EchoMode.Password)
         self.fCenterWidget.setLayout(self.fVLayout)
         self.fVLayout.setAlignment(Qt.AlignmentFlag.AlignCenter)
-
-        self.fCenterWidget.move(125, 0)
     def prepareStyles(self):
-        pass
-
-    def createAllCheckboxes(self):
-        userRoleList = [member.value for member in UserRole]
-        for userRole in userRoleList:
-            self.fRoleOptions.append(createCheckbox(self, userRole, self.fVLayout))
+        pass # Ehrlich, keine Ahnung für Styles
         
 
     def loadStyleSheet(self):

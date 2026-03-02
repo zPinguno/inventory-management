@@ -1,6 +1,7 @@
+import csv
 from typing import Any
 
-from PyQt6.QtWidgets import QTableWidgetItem, QPushButton
+from PyQt6.QtWidgets import QMessageBox, QTableWidgetItem, QPushButton
 
 from type.item import Item
 from type.itemheader import ItemHeader
@@ -32,6 +33,8 @@ class MainController(PageControllerBase):
         self.page.fFilterDropDown.currentIndexChanged.connect(self.refreshFilter)
         self.page.fFilterSearchButton.clicked.connect(self.onSearch)
         self.page.fTable.cellClicked.connect(self.onEdit)
+        self.page.fExportButton.clicked.connect(self.createCsvExportFile)
+        self.page.fFilterResetButton.clicked.connect(self.refreshItems)
         self.refreshFilter()
         self.refreshItems()
     def onEdit(self, row):
@@ -245,4 +248,37 @@ class MainController(PageControllerBase):
             strings.append(baseData.name)
 
         return strings
+    
+    def createCsvExportFile(self):
+        csvContent = []
+        csvHeader = ['Gegenstand', 'Gruppe', 'Abteilung', 'Fach', 'Ort', 'Verantwortlicher', 'Zustand']
+        tableContent = []
+        table = self.page.fTable
+        for row in range(table.rowCount()):
+            rowContent = []
+            for column in range(table.columnCount()):
+                tableitem = table.item(row, column)
+                rowContent.append(tableitem.text() if tableitem else "")
+            tableContent.append(rowContent)
+        csvContent.append(csvHeader)
+        for tableitem in tableContent:
+            csvContent.append([
+                tableitem[0],
+                tableitem[1],
+                tableitem[2],
+                tableitem[3],
+                tableitem[4],
+                tableitem[5],
+                tableitem[6]
+        ])
+        with open('export.csv', 'w', newline='') as csvfile:
+            writer = csv.writer(csvfile)
+            writer.writerows(csvContent)
+        self.showCSVMessage()
+    def showCSVMessage(self):
+        csvDialog = QMessageBox(self.page)
+        csvDialog.setIcon(QMessageBox.Icon.Information)
+        csvDialog.setWindowTitle('CSV Export')
+        csvDialog.setText('Die CSV Datei wurde erfolgreich exportiert!')
+        csvDialog.exec()
 

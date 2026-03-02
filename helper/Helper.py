@@ -1,3 +1,5 @@
+import hashlib
+
 from ui.pages.admin.adminpage import AdminPage
 from ui.pages.login.loginpage import LoginPage
 from ui.pages.main.mainpage import MainPage
@@ -12,3 +14,6 @@ def getControllerByPage(page:PageBase, this):
     if isinstance(page, AdminPage) :
         return this.fAdminPageController
     return None
+
+def hashPassword(password: str) -> str:
+        return hashlib.sha256(password.encode()).hexdigest()

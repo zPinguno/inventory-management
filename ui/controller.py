@@ -4,7 +4,7 @@ from ui.pages.main.maincontroller import MainController
 from ui.pages.admin.admincontroller import AdminController
 from type.user import User
 from model.model import Model
-import hashlib
+from helper.Helper import hashPassword
 
 from ui.pages.pageBase import PageBase
 from helper.Helper import getControllerByPage
@@ -51,15 +51,17 @@ class Controller:
             case "Admin":
                self.fCurrentPage = self.fAdminPageController.page
                self.fAdminPageController.showPage()
+               self.fAdminPageController.page.fLogoutButton.clicked.connect(self.showLoginPage)
     def loginUser(self, user:User):
         self.fCurrentUser = user
         self.fMainPageController.loginUser(user)
         self.fAdminPageController.loginUser(user)
 
     def onLogin(self):
+        self.model.load()
         username = self.fLoginPageController.page.fUserName.text()
         password = self.fLoginPageController.page.fPassword.text()
-        user = self.model.login(username, self.hashPassword(password))
+        user = self.model.login(username, hashPassword(password))
         if user != None:
             self.loginUser(user)
             self.selectPage("Main")
@@ -69,10 +71,7 @@ class Controller:
     def createUsers(self):
         if self.model.users.__len__() > 0:
             return
-        self.model.addUser(User('b', 'd', 'r', self.hashPassword('Hallo123#'), [UserRole.RESPONSIBLE, UserRole.ADMIN]))
-        self.model.addUser(User('b', 'd', 't', self.hashPassword('Hallo123#'), [UserRole.TEACHER]))
-        self.model.addUser(User('b', 'd', 'a', self.hashPassword('Hallo123#'), [UserRole.ADMIN]))
+        self.model.addUser(User('b', 'd', 'r', hashPassword('Hallo123#'), [UserRole.RESPONSIBLE, UserRole.ADMIN]))
+        self.model.addUser(User('b', 'd', 't', hashPassword('Hallo123#'), [UserRole.TEACHER]))
+        self.model.addUser(User('b', 'd', 'a', hashPassword('Hallo123#'), [UserRole.ADMIN]))
         self.model.save()
-    
-    def hashPassword(self, password: str) -> str:
-        return hashlib.sha256(password.encode()).hexdigest()

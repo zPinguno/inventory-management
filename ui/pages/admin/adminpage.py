@@ -21,6 +21,7 @@ class AdminPage(PageBase):
     fHeaderAdminButton: QPushButton
     fAddItemButton: QPushButton
     fRemoveItemButton: QPushButton
+    fLogoutButton: QPushButton
     def __init__(self):
         super().__init__()
     def initComponents(self):
@@ -30,9 +31,9 @@ class AdminPage(PageBase):
         self.createWidgets()
         self.show()
     def createWidgets(self):
-        self.fHeaderButton = createButton(self, 'Logout', x = 850, y = 6)
+        self.fLogoutButton = createButton(self, 'Logout', x = 850, y = 6)
         self.fSwitchSiteButton = createButton(self, 'Inventar Seite', x=15, y=6)
-        self.fDropDownMenu = createDropDownMenu(self, ['Nutzer', 'Gruppe', 'Ort', 'Fach', 'Objekt', 'Abteilung'], x = 420, y = 6)
+        self.fDropDownMenu = createDropDownMenu(self, ['Ort', 'Nutzer', 'Gruppe', 'Fach', 'Objekt', 'Abteilung'], x = 420, y = 6)
         self.fUserTable = createTable(self, ['Vorname', 'Nachname', 'Nutzername', 'Rolle', 'Löschen'],x = 0, y = 50)
         self.fLocationTable = createTable(self, ['Name','Löschen'],x = 0, y = 50)
         self.fSubjectTable = createTable(self, ['Name','Löschen'],x = 0, y = 50)
@@ -56,8 +57,7 @@ class AdminPage(PageBase):
         self.fGroupTable.move(420, 50)
         self.fDepartmentTable.move(420, 50)
 
-
-        self.fHeaderButton.raise_()
+        self.fLogoutButton.raise_()
         self.fDropDownMenu.raise_()
         self.fSwitchSiteButton.raise_()
 

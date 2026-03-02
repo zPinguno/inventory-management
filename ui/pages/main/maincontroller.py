@@ -1,5 +1,3 @@
-from ast import List
-from multiprocessing.spawn import prepare
 from typing import Any
 
 from PyQt6.QtWidgets import QTableWidgetItem, QPushButton

@@ -1,4 +1,5 @@
 from model.model import Model
+from type.object import Object
 from ui.pages.pageBase import PageBase
 from PyQt6.QtWidgets import *
 

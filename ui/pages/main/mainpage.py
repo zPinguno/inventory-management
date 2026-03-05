@@ -26,8 +26,8 @@ class MainPage(PageBase):
     fFilterLabel = QLabel
     fMainFilterWidget = QWidget
     fFilterSelected = ''
-    tableHeaders = [ItemHeader.OBJECT.value ,ItemHeader.GROUP.value, ItemHeader.DEPARTMENT.value, ItemHeader.SUBJECT.value, ItemHeader.LOCATION.value, ItemHeader.RESPONSIBLE.value, ItemHeader.STATE.value, 'Löschen']
-    filterHeaders = [ItemHeader.OBJECT.value, ItemHeader.GROUP.value, ItemHeader.DEPARTMENT.value, ItemHeader.SUBJECT.value, ItemHeader.LOCATION.value, ItemHeader.RESPONSIBLE.value, ItemHeader.STATE.value]
+    tableHeaders = [ItemHeader.OBJECT.value ,ItemHeader.GROUP.value, ItemHeader.SUBJECT.value, ItemHeader.LOCATION.value, ItemHeader.DEPARTMENT.value, ItemHeader.STATE.value, ItemHeader.RESPONSIBLE.value, 'Löschen']
+    filterHeaders = [ItemHeader.OBJECT.value ,ItemHeader.GROUP.value, ItemHeader.SUBJECT.value, ItemHeader.LOCATION.value, ItemHeader.DEPARTMENT.value, ItemHeader.STATE.value, ItemHeader.RESPONSIBLE.value]
     def __init__(self,model):
         self.model = model
         super().__init__()
@@ -41,9 +41,9 @@ class MainPage(PageBase):
     def createWidgets(self):
         if self.fVLayout is not None:
             return
-        self.fLogoutButton = createButton(self, 'Logout', x = 850, y = 6)
-        self.fSwitchSiteButton = createButton(self, 'Admin Seite', x = 15, y = 6)
-        self.fExportButton = createButton(self, 'Export in CSV', x = 250, y = 6)
+        self.fLogoutButton = createButton(self, 'Logout', x = 890, y = 10)
+        self.fSwitchSiteButton = createButton(self, 'Admin Seite', x = 5, y = 10)
+        self.fExportButton = createButton(self, 'Export in CSV', x = 200, y = 10)
         self.fAddItemButton = createButton(self, '+', x = self.width - 80, y = self.height - 80)
   
         self.fVLayout = QVBoxLayout()

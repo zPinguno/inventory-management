@@ -15,6 +15,8 @@ class Controller:
     fLoginPageController: LoginController
     fMainPageController: MainController
     fAdminPageController: AdminController
+
+    isCurrentlyWorking: bool
     isInitialized: bool
 
     fCurrentPage: PageBase
@@ -23,11 +25,18 @@ class Controller:
 
         self.model = Model()
         self.createUsers()
-        self.fLoginPageController = LoginController(self.selectPage)
-        self.fMainPageController = MainController(self.selectPage)
+        self.fLoginPageController = LoginController(self.selectPage, self.refreshIsCurrentlyWorkingForPageController)
+        self.fMainPageController = MainController(self.selectPage, self.refreshIsCurrentlyWorkingForPageController)
         self.fAdminPageController = AdminController(self.selectPage)
         self.showLoginPage()
         self.isInitialized = True
+        self.refreshIsCurrentlyWorkingForPageController(False)
+
+    def refreshIsCurrentlyWorkingForPageController(self, working:bool):
+        self.isCurrentlyWorking = working
+        self.fLoginPageController.isCurrentlyWorking = self.isCurrentlyWorking
+        self.fMainPageController.isCurrentlyWorking = self.isCurrentlyWorking
+        self.fAdminPageController.isCurrentlyWorking = self.isCurrentlyWorking
 
     def showLoginPage(self):
         self.fCurrentUser = None

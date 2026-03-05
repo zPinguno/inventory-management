@@ -1,6 +1,9 @@
 import csv
+from threading import Event
 from typing import Any
 
+from PyQt6.QtCore import QPoint
+from PyQt6.QtGui import QCloseEvent, QContextMenuEvent, QHideEvent
 from PyQt6.QtWidgets import QMessageBox, QTableWidgetItem, QPushButton
 
 from type.item import Item
@@ -8,6 +11,7 @@ from type.itemheader import ItemHeader
 from type.itemstate import ItemState, getAllStates, getAllStatesAsStrings
 from type.tableitem import TableItem
 from type.user import User
+from type.userrole import UserRole
 
 from ui.dialogs.addItem.addItem import AddItem
 from ui.pages.main.mainpage import MainPage
@@ -20,8 +24,8 @@ class MainController(PageControllerBase):
     fDialog: AddItem
     items: list[Item]
     currentTableItems: list[Item]
-    def __init__(self, selectPage):
-        super().__init__(selectPage)
+    def __init__(self, selectPage, refreshIsCurrentlyWorking):
+        super().__init__(selectPage, refreshIsCurrentlyWorking)
         self.model = Model()
         self.page = MainPage(self.model)
 
@@ -32,12 +36,16 @@ class MainController(PageControllerBase):
         self.page.fSwitchSiteButton.clicked.connect(lambda: self.selectPage("Admin"))
         self.page.fFilterDropDown.currentIndexChanged.connect(self.refreshFilter)
         self.page.fFilterSearchButton.clicked.connect(self.onSearch)
-        self.page.fTable.cellClicked.connect(self.onEdit)
+        if not self.fCurrentUser.hasRole(UserRole.TEACHER):
+            self.page.fTable.cellClicked.connect(self.onEdit)
         self.page.fExportButton.clicked.connect(self.createCsvExportFile)
         self.page.fFilterResetButton.clicked.connect(self.refreshItems)
         self.refreshFilter()
         self.refreshItems()
     def onEdit(self, row):
+        if self.isCurrentlyWorking:
+            return
+        self.refreshIsCurrentlyWorking(True)
         item = self.currentTableItems[row]
         self.showAddItemDialog(item)
 
@@ -124,22 +132,26 @@ class MainController(PageControllerBase):
             self.fDialog.fSaveButton.clicked.connect(self.onSaveEditItem)
         else:
             self.fDialog.fSaveButton.clicked.connect(self.onSaveItem)
+    def closeDialogEvent(self):
+        return self.refreshIsCurrentlyWorking(False)
     def onSaveEditItem(self):
         oldItem = self.fDialog.item
-        newValues = self.fDialog.getResult()
-        for item in self.items:
-            if item.id == oldItem.id:
-                item.object = newValues.object
-                item.group = newValues.group
-                item.subject = newValues.subject
-                item.location = newValues.location
-                item.department = newValues.department
-                item.state = newValues.state
-                item.responsiblePerson = newValues.responsiblePerson
-        self.model.items = self.items
-        self.model.save()
-        self.refreshItems()
-        self.fDialog.close()
+        if self.fCurrentUser.hasRole(UserRole.ADMIN) or self.fCurrentUser.getId() == oldItem.responsiblePerson.getId():
+            newValues = self.fDialog.getResult()
+            for item in self.items:
+                if item.id == oldItem.id:
+                    item.object = newValues.object
+                    item.group = newValues.group
+                    item.subject = newValues.subject
+                    item.location = newValues.location
+                    item.department = newValues.department
+                    item.state = newValues.state
+                    item.responsiblePerson = newValues.responsiblePerson
+            self.model.items = self.items
+            self.model.save()
+            self.refreshItems()
+            self.fDialog.close()
+            self.refreshIsCurrentlyWorking(False)
 
     def onStateChanged(self):
         if self.fDialog.fStateDropdown.currentText() == ItemState.BORROWED.value:
@@ -154,9 +166,12 @@ class MainController(PageControllerBase):
             editItem = None
 
         if editItem is not None:
-            self.fDialog = AddItem(self.model, self.getBaseDataAsStrings, editItem)
+            self.fDialog = AddItem(self.model, self.getBaseDataAsStrings, editItem, self.refreshIsCurrentlyWorking)
         else:
-            self.fDialog = AddItem(self.model, self.getBaseDataAsStrings)
+            if self.isCurrentlyWorking:
+                return
+            self.refreshIsCurrentlyWorking(True)
+            self.fDialog = AddItem(self.model, self.getBaseDataAsStrings, None, self.refreshIsCurrentlyWorking)
         self.initDialogLogic()
         if self.fDialog.exec():
             return
@@ -167,6 +182,8 @@ class MainController(PageControllerBase):
         self.refreshItems()
         self.currentTableItems = self.items
         self.fDialog.close()
+        self.refreshIsCurrentlyWorking(False)
+
     def refreshItems(self):
         self.model.load()
         self.items = self.model.items
@@ -210,9 +227,12 @@ class MainController(PageControllerBase):
             object = QTableWidgetItem(item.object.getName())
             group = QTableWidgetItem(item.group.getName())
             subject = QTableWidgetItem(item.subject.getName())
-            location = QTableWidgetItem(item.location.getName())
-            department = QTableWidgetItem(item.department.getName())
             state = QTableWidgetItem(item.state.value)
+            if item.state is not ItemState.BORROWED:
+                location = QTableWidgetItem(item.location.getName())
+            else:
+                location = QTableWidgetItem("")
+            department = QTableWidgetItem(item.department.getName())
             responsiblePerson = QTableWidgetItem(item.responsiblePerson.userName)
             preparedItems.append(TableItem(object, group, subject, location, department, state, responsiblePerson))
         return preparedItems

@@ -1,6 +1,5 @@
 import sys
-from PyQt6.QtWidgets import *
-
+from PyQt6.QtWidgets import QApplication
 from ui.controller import Controller
 
 sys.path.append(".")

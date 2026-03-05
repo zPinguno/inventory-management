@@ -27,7 +27,7 @@ class AdminController(PageControllerBase):
     addUserDialog: AddUser
     databaseTable: str
     def __init__(self, selectPage):
-        super().__init__(selectPage)
+        super().__init__(selectPage, None)
         self.page = AdminPage()
         self.model = Model()
     def initLogic(self):

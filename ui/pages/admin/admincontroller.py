@@ -27,7 +27,7 @@ class AdminController(PageControllerBase):
     addUserDialog: AddUser
     databaseTable: str
     def __init__(self, selectPage):
-        super().__init__(selectPage, None)
+        super().__init__(selectPage)
         self.page = AdminPage()
         self.model = Model()
     def initLogic(self):
@@ -63,14 +63,34 @@ class AdminController(PageControllerBase):
         name = self.masterDataDialog.fNameInput.text()
         match self.databaseTable:
             case 'Ort':
+                for item in self.model.items:
+                    if item.location.getName() == name:
+                        self.showAlreadyExistError(self.masterDataDialog)
+                        return
                 self.model.addLocation(Location(name))
             case 'Fach':
+                for item in self.model.items:
+                    if item.subject.getName() == name:
+                        self.showAlreadyExistError(self.masterDataDialog)
+                        return
                 self.model.addSubject(Subject(name)) 
             case 'Objekt':
+                for item in self.model.items:
+                    if item.object.getName() == name:
+                        self.showAlreadyExistError(self.masterDataDialog)
+                        return
                 self.model.addObject(Object(name))
             case 'Abteilung':
+                for item in self.model.items:
+                    if item.department.getName() == name:
+                        self.showAlreadyExistError(self.masterDataDialog)
+                        return
                 self.model.addDepartment(Department(name))
             case 'Gruppe':
+                for item in self.model.items:
+                    if item.group.getName() == name:
+                        self.showAlreadyExistError(self.masterDataDialog)
+                        return
                 self.model.addGroup(Group(name))
         self.model.save()
         self.masterDataDialog.hide()
@@ -242,28 +262,79 @@ class AdminController(PageControllerBase):
         if deleteButton:
             index = table.indexAt(deleteButton.pos())
             if index.isValid():
-                table.removeRow(index.row())
-                match self.databaseTable:
-                    case 'Nutzer':
-                        self.model.users.pop(index.row())   
-                    case 'Ort':
-                        self.model.locations.pop(index.row())
-                    case 'Objekt':
-                        self.model.objects.pop(index.row())
-                    case 'Gruppe':
-                        self.model.groups.pop(index.row())
-                    case 'Fach':
-                        self.model.subjects.pop(index.row())
-                    case 'Abteilung':
-                        self.model.departments.pop(index.row())
+                self.checkIfDeleteIsClickable(index)
                 self.model.save()
         self.refreshAll()
 
+    def checkIfDeleteIsClickable(self, index):
+        match self.databaseTable:
+            case 'Nutzer':
+                user = self.users[index.row()]
+                if user.userName == self.fCurrentUser.userName:
+                    self.showUserError(self.page)
+                else:
+                    self.model.users.pop(index.row())
+            case 'Ort':
+                location = self.locations[index.row()]
+                for item in self.model.items:
+                    if item.location.getName() == location.getName():
+                        self.showElementError(self.page)
+                        return
+                self.model.locations.pop(index.row())
+            case 'Objekt':
+                object = self.objects[index.row()]
+                for item in self.model.items:
+                    if item.object.getName() == object.getName():
+                        self.showElementError(self.page)
+                        return
+                self.model.objects.pop(index.row())
+            case 'Gruppe':
+                group = self.groups[index.row()]
+                for item in self.model.items:
+                    if item.group.getName() == group.getName():
+                        self.showElementError(self.page)
+                        return
+                self.model.groups.pop(index.row())
+            case 'Fach':
+                subject = self.subjects[index.row()]
+                for item in self.model.items:
+                    if item.subject.getName() == subject.getName():
+                        self.showElementError(self.page)
+                        return
+                self.model.subjects.pop(index.row())
+            case 'Abteilung':
+                department = self.departments[index.row()]
+                for item in self.model.items:
+                    if item.department.getName() == department.getName():
+                        self.showElementError(self.page)
+                        return
+                self.model.departments.pop(index.row())
 
     def showDialogError(self, dialog):
         errorDialog = QMessageBox(dialog)
         errorDialog.setIcon(QMessageBox.Icon.Warning)
         errorDialog.setWindowTitle('Eintrag Fehler')
         errorDialog.setText('Alle Felder müssen ausgefüllt werden!')
+        errorDialog.setStandardButtons(QMessageBox.StandardButton.Ok)
+        errorDialog.exec()
+    def showElementError(self, page):
+        errorDialog = QMessageBox(page)
+        errorDialog.setIcon(QMessageBox.Icon.Warning)
+        errorDialog.setWindowTitle('Löschen Fehler')
+        errorDialog.setText('Das Element kann nicht gelöscht werden, da es noch in Benutzung ist!')
+        errorDialog.setStandardButtons(QMessageBox.StandardButton.Ok)
+        errorDialog.exec()
+    def showAlreadyExistError(self, page):
+        errorDialog = QMessageBox(page)
+        errorDialog.setIcon(QMessageBox.Icon.Warning)
+        errorDialog.setWindowTitle('Eintrag Fehler')
+        errorDialog.setText('Das Element existiert bereits!')
+        errorDialog.setStandardButtons(QMessageBox.StandardButton.Ok)
+        errorDialog.exec()
+    def showUserError(self, page):
+        errorDialog = QMessageBox(page)
+        errorDialog.setIcon(QMessageBox.Icon.Warning)
+        errorDialog.setWindowTitle('Löschen Fehler')
+        errorDialog.setText('Du bist der Benutzer! Du kannst dich nicht selbst löschen!')
         errorDialog.setStandardButtons(QMessageBox.StandardButton.Ok)
         errorDialog.exec()

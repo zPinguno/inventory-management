@@ -17,7 +17,12 @@ class User:
         self.roles = roles
         if id != None:
             self.id = id
-
+    def getId(self):
+        return self.id
+    def setId(self, id):
+        self.id = id
+    def hasRole(self, role):
+        return role in self.roles
     def getFirstName(self):
         return self.firstName
     def setFirstName(self, firstName):

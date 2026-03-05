@@ -4,7 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="10e1409c-2a5a-477e-b2fc-bbdf5fdd1bd2" name="Changes" comment=".add">
+    <list default="true" id="10e1409c-2a5a-477e-b2fc-bbdf5fdd1bd2" name="Changes" comment="style">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/type/user.py" beforeDir="false" afterPath="$PROJECT_DIR$/type/user.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ui/pages/main/maincontroller.py" beforeDir="false" afterPath="$PROJECT_DIR$/ui/pages/main/maincontroller.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ui/pages/main/mainpage.py" beforeDir="false" afterPath="$PROJECT_DIR$/ui/pages/main/mainpage.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -137,7 +140,7 @@
       <workItem from="1770371383687" duration="5389000" />
       <workItem from="1772524105889" duration="317000" />
       <workItem from="1772524521294" duration="3432000" />
-      <workItem from="1772693688723" duration="5838000" />
+      <workItem from="1772693688723" duration="8604000" />
     </task>
     <task id="LOCAL-00001" summary="...">
       <option name="closed" value="true" />
@@ -235,7 +238,15 @@
       <option name="project" value="LOCAL" />
       <updated>1772699790343</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="style">
+      <option name="closed" value="true" />
+      <created>1772700032788</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1772700032788</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -278,14 +289,15 @@
     <MESSAGE value="fix 2" />
     <MESSAGE value="." />
     <MESSAGE value=".add" />
-    <option name="LAST_COMMIT_MESSAGE" value=".add" />
+    <MESSAGE value="style" />
+    <option name="LAST_COMMIT_MESSAGE" value="style" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/ui/pages/main/maincontroller.py</url>
-          <line>68</line>
+          <line>70</line>
           <option name="timeStamp" value="7" />
         </line-breakpoint>
       </breakpoints>
@@ -301,6 +313,6 @@
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/SchulInventarVerwaltung$loginpage.coverage" NAME="loginpage Coverage Results" MODIFIED="1772442182411" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/ui/pages/login" />
     <SUITE FILE_PATH="coverage/SchulInventarVerwaltung$run_main.coverage" NAME="run main Coverage Results" MODIFIED="1772694220047" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
-    <SUITE FILE_PATH="coverage/SchulInventarVerwaltung$main.coverage" NAME="main Coverage Results" MODIFIED="1772699885404" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/" />
+    <SUITE FILE_PATH="coverage/SchulInventarVerwaltung$main.coverage" NAME="main Coverage Results" MODIFIED="1772703092811" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/" />
   </component>
 </project>

@@ -27,7 +27,7 @@ class Controller:
         self.createUsers()
         self.fLoginPageController = LoginController(self.selectPage, self.refreshIsCurrentlyWorkingForPageController)
         self.fMainPageController = MainController(self.selectPage, self.refreshIsCurrentlyWorkingForPageController)
-        self.fAdminPageController = AdminController(self.selectPage)
+        self.fAdminPageController = AdminController(self.selectPage, self.refreshIsCurrentlyWorkingForPageController)
         self.showLoginPage()
         self.isInitialized = True
         self.refreshIsCurrentlyWorkingForPageController(False)

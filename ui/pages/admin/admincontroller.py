@@ -26,8 +26,8 @@ class AdminController(PageControllerBase):
     masterDataDialog: MasterDataDialog
     addUserDialog: AddUser
     databaseTable: str
-    def __init__(self, selectPage):
-        super().__init__(selectPage)
+    def __init__(self, selectPage, refreshIsCurrentlyWorking):
+        super().__init__(selectPage, refreshIsCurrentlyWorking)
         self.page = AdminPage()
         self.model = Model()
     def initLogic(self):
@@ -42,6 +42,9 @@ class AdminController(PageControllerBase):
         self.page.fAddItemButton.clicked.connect(self.selectDialog)
 
     def selectDialog(self):
+        if self.isCurrentlyWorking:
+            return
+        self.refreshIsCurrentlyWorking(True)
         if (self.databaseTable == 'Nutzer'):
             self.showAddUserDialog()
         else:
@@ -55,6 +58,7 @@ class AdminController(PageControllerBase):
         self.addUserDialog = AddUser()
         self.addUserDialog.show()
         self.addUserDialog.fSaveButton.clicked.connect(self.safeUserEntry)
+        self.refreshIsCurrentlyWorking(False)
     
     def safeMasterDataEntry(self):
         if self.masterDataDialog.fNameInput.text() == "":
@@ -114,7 +118,8 @@ class AdminController(PageControllerBase):
             newUser = User(firstName, lastName, userName, hashPassword(password), roles)
             self.model.addUser(newUser)
             self.model.save()
-            self.addUserDialog.hide()
+            self.addUserDialog.close()
+            self.refreshIsCurrentlyWorking(False)
             self.refreshAll()
 
     def checkTable(self):

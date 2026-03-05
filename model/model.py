@@ -49,28 +49,23 @@ class Model:
         )""")
         conn.execute("""
         CREATE TABLE IF NOT EXISTS Departments (
-            Id INTEGER PRIMARY KEY AUTOINCREMENT,
-            Name TEXT
+            Name TEXT PRIMARY KEY
         )""")
         conn.execute("""
         CREATE TABLE IF NOT EXISTS Subjects (
-            Id INTEGER PRIMARY KEY AUTOINCREMENT,
-            Name TEXT
+            Name TEXT PRIMARY KEY
         )""")
         conn.execute("""
         CREATE TABLE IF NOT EXISTS Groups (
-            Id INTEGER PRIMARY KEY AUTOINCREMENT,
-            Name TEXT
+            Name TEXT PRIMARY KEY
         )""")
         conn.execute("""
         CREATE TABLE IF NOT EXISTS Objects (
-            Id INTEGER PRIMARY KEY AUTOINCREMENT,
-            Name TEXT
+            Name TEXT PRIMARY KEY
         )""")
         conn.execute("""
         CREATE TABLE IF NOT EXISTS Locations (
-            Id INTEGER PRIMARY KEY AUTOINCREMENT,
-            Name TEXT
+            Name TEXT PRIMARY KEY
         )""")
         conn.commit()
 
@@ -139,25 +134,25 @@ class Model:
             ]
             self.users = self.normalizeUsers(users)
 
-            cur = conn.execute("SELECT * FROM Groups ORDER BY Id")
+            cur = conn.execute("SELECT Name FROM Groups")
             self.groups = [
-                Group(id=row[0], name=row[1]) for row in cur.fetchall()
+                Group(name=row[0]) for row in cur.fetchall()
             ]
-            cur = conn.execute("SELECT ID, Name FROM Objects ORDER BY Id")
+            cur = conn.execute("SELECT Name FROM Objects")
             self.objects = [
-                Object(id=row[0], name=row[1]) for row in cur.fetchall()
+                Object(name=row[0]) for row in cur.fetchall()
             ]
-            cur = conn.execute("SELECT ID, Name FROM Subjects ORDER BY Id")
+            cur = conn.execute("SELECT Name FROM Subjects")
             self.subjects = [
-                Subject(id=row[0], name=row[1]) for row in cur.fetchall()
+                Subject(name=row[0]) for row in cur.fetchall()
             ]
-            cur = conn.execute("SELECT ID, Name FROM Departments ORDER BY Id")
+            cur = conn.execute("SELECT Name FROM Departments")
             self.departments = [
-                Department(id=row[0], name=row[1]) for row in cur.fetchall()
+                Department(name=row[0]) for row in cur.fetchall()
             ]
-            cur = conn.execute("SELECT ID, Name FROM Locations ORDER BY Id")
+            cur = conn.execute("SELECT Name FROM Locations")
             self.locations = [
-                Location(id=row[0], name=row[1]) for row in cur.fetchall()
+                Location(name=row[0]) for row in cur.fetchall()
             ]
             cur = conn.execute("SELECT ID, itemName, GroupName, Department, Subject, Location, ResponsiblePerson, State FROM Items ORDER BY Id")
             self.items = normalizeItems([

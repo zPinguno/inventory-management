@@ -60,7 +60,10 @@ class MainController(PageControllerBase):
         if isinstance(searchParam, User):
             searchParam = searchParam.userName
         if not isinstance(searchParam, str):
-            searchParam = searchParam.getName()
+            try:
+                searchParam = searchParam.getName()
+            except:
+                searchParam = ''
 
         return searchParam
 

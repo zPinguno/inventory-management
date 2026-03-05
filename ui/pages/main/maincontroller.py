@@ -11,6 +11,7 @@ from type.itemheader import ItemHeader
 from type.itemstate import ItemState, getAllStates, getAllStatesAsStrings
 from type.tableitem import TableItem
 from type.user import User
+from type.userrole import UserRole
 
 from ui.dialogs.addItem.addItem import AddItem
 from ui.pages.main.mainpage import MainPage
@@ -35,7 +36,8 @@ class MainController(PageControllerBase):
         self.page.fSwitchSiteButton.clicked.connect(lambda: self.selectPage("Admin"))
         self.page.fFilterDropDown.currentIndexChanged.connect(self.refreshFilter)
         self.page.fFilterSearchButton.clicked.connect(self.onSearch)
-        self.page.fTable.cellClicked.connect(self.onEdit)
+        if not self.fCurrentUser.hasRole(UserRole.TEACHER):
+            self.page.fTable.cellClicked.connect(self.onEdit)
         self.page.fExportButton.clicked.connect(self.createCsvExportFile)
         self.page.fFilterResetButton.clicked.connect(self.refreshItems)
         self.refreshFilter()
@@ -134,21 +136,22 @@ class MainController(PageControllerBase):
         return self.refreshIsCurrentlyWorking(False)
     def onSaveEditItem(self):
         oldItem = self.fDialog.item
-        newValues = self.fDialog.getResult()
-        for item in self.items:
-            if item.id == oldItem.id:
-                item.object = newValues.object
-                item.group = newValues.group
-                item.subject = newValues.subject
-                item.location = newValues.location
-                item.department = newValues.department
-                item.state = newValues.state
-                item.responsiblePerson = newValues.responsiblePerson
-        self.model.items = self.items
-        self.model.save()
-        self.refreshItems()
-        self.fDialog.close()
-        self.refreshIsCurrentlyWorking(False)
+        if self.fCurrentUser.hasRole(UserRole.ADMIN) or self.fCurrentUser.getId() == oldItem.responsiblePerson.getId():
+            newValues = self.fDialog.getResult()
+            for item in self.items:
+                if item.id == oldItem.id:
+                    item.object = newValues.object
+                    item.group = newValues.group
+                    item.subject = newValues.subject
+                    item.location = newValues.location
+                    item.department = newValues.department
+                    item.state = newValues.state
+                    item.responsiblePerson = newValues.responsiblePerson
+            self.model.items = self.items
+            self.model.save()
+            self.refreshItems()
+            self.fDialog.close()
+            self.refreshIsCurrentlyWorking(False)
 
     def onStateChanged(self):
         if self.fDialog.fStateDropdown.currentText() == ItemState.BORROWED.value:

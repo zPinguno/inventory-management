@@ -26,8 +26,8 @@ class MainPage(PageBase):
     fFilterLabel = QLabel
     fMainFilterWidget = QWidget
     fFilterSelected = ''
-    tableHeaders = [ItemHeader.OBJECT.value ,ItemHeader.GROUP.value, ItemHeader.DEPARTMENT.value, ItemHeader.SUBJECT.value, ItemHeader.LOCATION.value, ItemHeader.RESPONSIBLE.value, ItemHeader.STATE.value, 'Löschen']
-    filterHeaders = [ItemHeader.OBJECT.value, ItemHeader.GROUP.value, ItemHeader.DEPARTMENT.value, ItemHeader.SUBJECT.value, ItemHeader.LOCATION.value, ItemHeader.RESPONSIBLE.value, ItemHeader.STATE.value]
+    tableHeaders = [ItemHeader.OBJECT.value ,ItemHeader.GROUP.value, ItemHeader.SUBJECT.value, ItemHeader.LOCATION.value, ItemHeader.DEPARTMENT.value, ItemHeader.STATE.value, ItemHeader.RESPONSIBLE.value, 'Löschen']
+    filterHeaders = [ItemHeader.OBJECT.value ,ItemHeader.GROUP.value, ItemHeader.SUBJECT.value, ItemHeader.LOCATION.value, ItemHeader.DEPARTMENT.value, ItemHeader.STATE.value, ItemHeader.RESPONSIBLE.value]
     def __init__(self,model):
         self.model = model
         super().__init__()

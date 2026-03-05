@@ -5,7 +5,7 @@ from model.model import Model
 from type.department import Department
 from type.group import Group
 from type.item import Item
-from type.itemstate import getAllStates, getAllStatesAsText, normalizeText
+from type.itemstate import getAllStates, getAllStatesAsText, normalizeText, ItemState
 from type.location import Location
 from type.object import Object
 from type.subject import Subject
@@ -38,17 +38,21 @@ class AddItem(DialogBase):
     fStateLabel: QLabel
 
     fSaveButton: QPushButton
-    def __init__(self, model:Model, getBaseDataAsStrings, item:Item = None):
+    def __init__(self, model:Model, getBaseDataAsStrings, item:Item = None, refreshIsWorking = None):
         QDialog.__init__(self)
         self.getBaseDataAsStrings = getBaseDataAsStrings
+        self.refreshIsWorking = refreshIsWorking
         self.model = model
         self.item = item
         self.width = 400
         self.height = 400
+        self.refreshIsWorking = refreshIsWorking
         self.setFixedSize(self.width, self.height)
-        # initComponents explicitly called here instead of in DialogBase constructor
         self.initComponents()
 
+    def closeEvent(self, a0):
+        self.refreshIsWorking(False)
+        a0.accept()
     def selectWindowTitle(self):
         if self.item is not None:
             self.setWindowTitle("Eintrag bearbeiten")
@@ -142,7 +146,10 @@ class AddItem(DialogBase):
         state = normalizeText(self.fStateDropdown.currentText())
         responsiblePerson = self.model.getUserByUserName(self.fResponsiblePersonDropdown.currentText())
 
-        return Item(object, group, department, subject, location, responsiblePerson, state)
+        item = Item(object, group, department, subject, location, responsiblePerson, state)
+        if item.state is ItemState.BORROWED:
+            item.location = None
+        return item
 
     def getInstanceByText(self, text:str, type):
         return type(text)

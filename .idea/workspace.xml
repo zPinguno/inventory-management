@@ -4,10 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="10e1409c-2a5a-477e-b2fc-bbdf5fdd1bd2" name="Changes" comment="fix 2">
-      <change beforePath="$PROJECT_DIR$/.idea/SchulInventarVerwaltung.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/SchulInventarVerwaltung.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="10e1409c-2a5a-477e-b2fc-bbdf5fdd1bd2" name="Changes" comment=".">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/export.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/local.db" beforeDir="false" afterPath="$PROJECT_DIR$/local.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ui/controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/ui/controller.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ui/dialogs/addItem/addItem.py" beforeDir="false" afterPath="$PROJECT_DIR$/ui/dialogs/addItem/addItem.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ui/pages/admin/admincontroller.py" beforeDir="false" afterPath="$PROJECT_DIR$/ui/pages/admin/admincontroller.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ui/pages/login/logincontroller.py" beforeDir="false" afterPath="$PROJECT_DIR$/ui/pages/login/logincontroller.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ui/pages/main/maincontroller.py" beforeDir="false" afterPath="$PROJECT_DIR$/ui/pages/main/maincontroller.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ui/pages/pagecontrollerbase.py" beforeDir="false" afterPath="$PROJECT_DIR$/ui/pages/pagecontrollerbase.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,8 +45,8 @@
 }</component>
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/zPinguno/inventory-management.git&quot;,
-    &quot;accountId&quot;: &quot;5ed3fef8-c0c2-4f2f-95a6-f76e1fee36be&quot;
+    &quot;url&quot;: &quot;https://github.com/zPinguno/inventory-management&quot;,
+    &quot;accountId&quot;: &quot;ce5d75b3-17e6-4ce3-8ac2-0c97f2ec9f9b&quot;
   }
 }</component>
   <component name="McpProjectServerCommands">
@@ -59,6 +66,7 @@
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "Python.loginpage.executor": "Debug",
     "Python.main.executor": "Debug",
+    "Python.run main.executor": "Debug",
     "RunOnceActivity.MCP Project settings loaded": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
@@ -70,6 +78,7 @@
     "git-widget-placeholder": "master",
     "ignore.virus.scanning.warn.message": "true",
     "junie.onboarding.icon.badge.shown": "true",
+    "last_opened_file_path": "C:/Users/benja/PycharmProjects/SchulInventarVerwaltung",
     "list.type.of.created.stylesheet": "CSS",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -87,7 +96,7 @@
     </key>
   </component>
   <component name="RunManager">
-    <configuration name="main" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
+    <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="SchulInventarVerwaltung" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -96,9 +105,8 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="SDK_NAME" value="Python 3.12" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="false" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/" />
+      <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
@@ -112,11 +120,17 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.main" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-python-sdk-f2b7a9f6281b-6e1f45a539f7-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-253.29346.142" />
+        <option value="bundled-js-predefined-d6986cc7102b-9b0f141eb926-JavaScript-PY-253.31033.139" />
+        <option value="bundled-python-sdk-2653e85de345-6d6dccd035ac-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-253.31033.139" />
       </set>
     </attachedChunks>
   </component>
@@ -130,6 +144,9 @@
       <workItem from="1770367021384" duration="3672000" />
       <workItem from="1770370787246" duration="386000" />
       <workItem from="1770371383687" duration="5389000" />
+      <workItem from="1772524105889" duration="317000" />
+      <workItem from="1772524521294" duration="3432000" />
+      <workItem from="1772693688723" duration="5540000" />
     </task>
     <task id="LOCAL-00001" summary="...">
       <option name="closed" value="true" />
@@ -211,7 +228,15 @@
       <option name="project" value="LOCAL" />
       <updated>1772364679252</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary=".">
+      <option name="closed" value="true" />
+      <created>1772521916382</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1772521916382</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -252,14 +277,15 @@
     <MESSAGE value="added filter funciton" />
     <MESSAGE value="fix" />
     <MESSAGE value="fix 2" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix 2" />
+    <MESSAGE value="." />
+    <option name="LAST_COMMIT_MESSAGE" value="." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/ui/pages/main/maincontroller.py</url>
-          <line>62</line>
+          <line>68</line>
           <option name="timeStamp" value="7" />
         </line-breakpoint>
       </breakpoints>
@@ -274,7 +300,7 @@
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/SchulInventarVerwaltung$loginpage.coverage" NAME="loginpage Coverage Results" MODIFIED="1772442182411" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/ui/pages/login" />
-    <SUITE FILE_PATH="coverage/SchulInventarVerwaltung$run_main.coverage" NAME="main Coverage Results" MODIFIED="1772442306077" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
-    <SUITE FILE_PATH="coverage/SchulInventarVerwaltung$main.coverage" NAME="main Coverage Results" MODIFIED="1772442579773" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/SchulInventarVerwaltung$run_main.coverage" NAME="run main Coverage Results" MODIFIED="1772694220047" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/SchulInventarVerwaltung$main.coverage" NAME="main Coverage Results" MODIFIED="1772697538201" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/" />
   </component>
 </project>

@@ -6,8 +6,8 @@ from model.model import Model
 class LoginController(PageControllerBase):
     page: LoginPage
     model: Model
-    def __init__(self, selectPage):
-        super().__init__(selectPage)
+    def __init__(self, selectPage, refreshIsCurrentlyWorking):
+        super().__init__(selectPage, refreshIsCurrentlyWorking)
         self.page = LoginPage()
     def initLogic(self):
         pass

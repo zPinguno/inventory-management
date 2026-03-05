@@ -7,9 +7,14 @@ class PageControllerBase:
 
     fCurrentUser: User
 
-    def __init__(self, selectPage):
+    isCurrentlyWorking: bool
+    refreshIsCurrentlyWorking: callable
+    def __init__(self, selectPage, refreshIsCurrentlyWorking):
         self.selectPage = selectPage
+        self.refreshIsCurrentlyWorking = refreshIsCurrentlyWorking
+
         pass
+
     def showPage(self):
         self.page.initComponents()
         self.initLogic()

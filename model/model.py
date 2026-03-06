@@ -211,6 +211,7 @@ class Model:
         for user in self.users:
             if userName in user.userName:
                 return user
+        return None
     def findBaseDataByName(self, dataList: list, searchName: str):
         for item in dataList:
             if searchName in item.name:

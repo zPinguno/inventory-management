@@ -115,6 +115,9 @@ class AdminController(PageControllerBase):
             if firstName == "" or lastName == "" or userName == "" or password == "" or len(roles) == 0:
                 self.showDialogError(self.addUserDialog)
                 return
+            if self.model.getUserByUserName(userName) is not None:
+                self.showUserAlreadyExistsError(self.addUserDialog)
+                return
             newUser = User(firstName, lastName, userName, hashPassword(password), roles)
             self.model.addUser(newUser)
             self.model.save()
@@ -341,5 +344,13 @@ class AdminController(PageControllerBase):
         errorDialog.setIcon(QMessageBox.Icon.Warning)
         errorDialog.setWindowTitle('Löschen Fehler')
         errorDialog.setText('Du bist der Benutzer! Du kannst dich nicht selbst löschen!')
+        errorDialog.setStandardButtons(QMessageBox.StandardButton.Ok)
+        errorDialog.exec()
+
+    def showUserAlreadyExistsError(self, page):
+        errorDialog = QMessageBox(page)
+        errorDialog.setIcon(QMessageBox.Icon.Warning)
+        errorDialog.setWindowTitle('Benutzer Anlegen Fehler')
+        errorDialog.setText('Dieser Benutzername ist bereits vergeben!')
         errorDialog.setStandardButtons(QMessageBox.StandardButton.Ok)
         errorDialog.exec()

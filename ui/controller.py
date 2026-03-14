@@ -25,9 +25,9 @@ class Controller:
 
         self.model = Model()
         self.createUsers()
-        self.fLoginPageController = LoginController(self.selectPage, self.refreshIsCurrentlyWorkingForPageController)
-        self.fMainPageController = MainController(self.selectPage, self.refreshIsCurrentlyWorkingForPageController)
-        self.fAdminPageController = AdminController(self.selectPage, self.refreshIsCurrentlyWorkingForPageController)
+        self.fLoginPageController = LoginController(self.selectPage, self.refreshIsCurrentlyWorkingForPageController,self.onLogin)
+        self.fMainPageController = MainController(self.selectPage, self.refreshIsCurrentlyWorkingForPageController, self.showLoginPage)
+        self.fAdminPageController = AdminController(self.selectPage, self.refreshIsCurrentlyWorkingForPageController, self.showLoginPage)
         self.showLoginPage()
         self.isInitialized = True
         self.refreshIsCurrentlyWorkingForPageController(False)
@@ -51,16 +51,14 @@ class Controller:
             case "Login":
                 self.fCurrentPage = self.fLoginPageController.page
                 self.fLoginPageController.showPage()
-                self.fLoginPageController.page.fLoginButton.clicked.connect(self.onLogin)
-                self.fLoginPageController.page.fPassword.returnPressed.connect(self.onLogin)
+
             case "Main":
                 self.fCurrentPage = self.fMainPageController.page
                 self.fMainPageController.showPage()
-                self.fMainPageController.page.fLogoutButton.clicked.connect(self.showLoginPage)
+
             case "Admin":
                self.fCurrentPage = self.fAdminPageController.page
                self.fAdminPageController.showPage()
-               self.fAdminPageController.page.fLogoutButton.clicked.connect(self.showLoginPage)
     def loginUser(self, user:User):
         self.fCurrentUser = user
         self.fMainPageController.loginUser(user)

@@ -24,20 +24,31 @@ class MainController(PageControllerBase):
     fDialog: AddItem
     items: list[Item]
     currentTableItems: list[Item]
-    def __init__(self, selectPage, refreshIsCurrentlyWorking):
-        super().__init__(selectPage, refreshIsCurrentlyWorking)
+    def __init__(self, selectPage, refreshIsCurrentlyWorking, showLoginPage):
         self.model = Model()
         self.page = MainPage(self.model)
-
+        super().__init__(selectPage, refreshIsCurrentlyWorking)
+        self.showLoginPage = showLoginPage
+    def detachHandlers(self):
+        self.page.fLogoutButton.clicked.disconnect()
+        self.page.fAddItemButton.clicked.disconnect()
+        self.page.fSwitchSiteButton.clicked.disconnect()
+        self.page.fFilterDropDown.currentIndexChanged.disconnect()
+        self.page.fFilterSearchButton.clicked.disconnect()
+        self.page.fExportButton.clicked.disconnect()
+        self.page.fFilterResetButton.clicked.disconnect()
 
     def initLogic(self):
         super().initLogic()
+        self.page.fLogoutButton.clicked.connect(self.showLoginPage)
         self.page.fAddItemButton.clicked.connect(self.showAddItemDialog)
         self.page.fSwitchSiteButton.clicked.connect(lambda: self.selectPage("Admin"))
         self.page.fFilterDropDown.currentIndexChanged.connect(self.refreshFilter)
         self.page.fFilterSearchButton.clicked.connect(self.onSearch)
         if not self.fCurrentUser.hasRole(UserRole.TEACHER):
             self.page.fTable.cellClicked.connect(self.onEdit)
+        else:
+            self.page.fTable.cellClicked.disconnect()
         self.page.fExportButton.clicked.connect(self.createCsvExportFile)
         self.page.fFilterResetButton.clicked.connect(self.refreshItems)
         self.refreshFilter()

@@ -26,20 +26,30 @@ class AdminController(PageControllerBase):
     masterDataDialog: MasterDataDialog
     addUserDialog: AddUser
     databaseTable: str
-    def __init__(self, selectPage, refreshIsCurrentlyWorking):
-        super().__init__(selectPage, refreshIsCurrentlyWorking)
+    def __init__(self, selectPage, refreshIsCurrentlyWorking,showLoginPage):
         self.page = AdminPage()
+        super().__init__(selectPage, refreshIsCurrentlyWorking)
+        self.showLoginPage = showLoginPage
         self.model = Model()
     def initLogic(self):
         super().initLogic()
         self.checkTable()
         self.refreshAll()
+        self.page.fLogoutButton.clicked.connect(self.showLoginPage)
 
         self.page.fDropDownMenu.currentIndexChanged.connect(self.checkTable)
         self.page.fDropDownMenu.currentIndexChanged.connect(self.refreshAll)
         
         self.page.fSwitchSiteButton.clicked.connect(lambda: self.selectPage("Main"))
         self.page.fAddItemButton.clicked.connect(self.selectDialog)
+    def detachHandlers(self):
+        self.page.fLogoutButton.clicked.disconnect()
+        self.page.fDropDownMenu.currentIndexChanged.disconnect()
+        self.page.fSwitchSiteButton.clicked.disconnect()
+        self.page.fAddItemButton.clicked.disconnect()
+
+
+
 
     def selectDialog(self):
         if self.isCurrentlyWorking:

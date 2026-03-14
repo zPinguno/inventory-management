@@ -7,6 +7,7 @@ class PageControllerBase:
 
     fCurrentUser: User
 
+    isInitialized:bool = False
     isCurrentlyWorking: bool
     refreshIsCurrentlyWorking: callable
     def __init__(self, selectPage, refreshIsCurrentlyWorking):
@@ -14,15 +15,21 @@ class PageControllerBase:
         self.refreshIsCurrentlyWorking = refreshIsCurrentlyWorking
 
         pass
-
+    def detachHandlers(self):
+        pass
     def showPage(self):
-        self.page.initComponents()
+        if not self.isInitialized:
+            self.page.initComponents()
+        else:
+            self.detachHandlers()
         self.initLogic()
+        self.page.show()
     def hidePage(self):
         self.page.hide()
         self.page.deInitComponents()
     def initLogic(self):
         self.showSwitchPageButton()
+        self.isInitialized = True
     def getPage(self):
         return self.page
     def showSwitchPageButton(self):

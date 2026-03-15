@@ -60,7 +60,7 @@ class AdminController(PageControllerBase):
         else:
             self.showMasterDataDialog()
     def showMasterDataDialog(self):
-        self.masterDataDialog = MasterDataDialog(self.databaseTable)
+        self.masterDataDialog = MasterDataDialog(self.databaseTable, self.refreshIsCurrentlyWorking)
         self.masterDataDialog.show()
         self.masterDataDialog.fSaveButton.clicked.connect(self.safeMasterDataEntry)
 
@@ -69,7 +69,7 @@ class AdminController(PageControllerBase):
         self.addUserDialog.show()
         self.addUserDialog.fSaveButton.clicked.connect(self.safeUserEntry)
         self.refreshIsCurrentlyWorking(False)
-    
+
     def safeMasterDataEntry(self):
         if self.masterDataDialog.fNameInput.text() == "":
             self.showDialogError(self.masterDataDialog)
@@ -107,7 +107,7 @@ class AdminController(PageControllerBase):
                         return
                 self.model.addGroup(Group(name))
         self.model.save()
-        self.masterDataDialog.hide()
+        self.masterDataDialog.close()
         self.refreshAll()
     def safeUserEntry(self):
             firstName = self.addUserDialog.fFirstNameInput.text()

@@ -1,9 +1,6 @@
 import csv
-from threading import Event
-from typing import Any
 
-from PyQt6.QtCore import QPoint
-from PyQt6.QtGui import QCloseEvent, QContextMenuEvent, QHideEvent
+from typing import Any
 from PyQt6.QtWidgets import QMessageBox, QTableWidgetItem, QPushButton
 
 from type.item import Item
@@ -29,6 +26,7 @@ class MainController(PageControllerBase):
         self.page = MainPage(self.model)
         super().__init__(selectPage, refreshIsCurrentlyWorking)
         self.showLoginPage = showLoginPage
+        
     def detachHandlers(self):
         self.page.fLogoutButton.clicked.disconnect()
         self.page.fAddItemButton.clicked.disconnect()
@@ -37,6 +35,7 @@ class MainController(PageControllerBase):
         self.page.fFilterSearchButton.clicked.disconnect()
         self.page.fExportButton.clicked.disconnect()
         self.page.fFilterResetButton.clicked.disconnect()
+        self.page.fTable.cellClicked.disconnect()
 
     def initLogic(self):
         super().initLogic()

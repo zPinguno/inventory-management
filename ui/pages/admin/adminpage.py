@@ -32,14 +32,14 @@ class AdminPage(PageBase):
         self.show()
     def createWidgets(self):
         self.fLogoutButton = createButton(self, 'Logout', x = 850, y = 6)
-        self.fSwitchSiteButton = createButton(self, 'Inventar Seite', x=15, y=6)
+        self.fSwitchSiteButton = createButton(self, 'Inventar Seite', x = 5, y = 10)
         self.fDropDownMenu = createDropDownMenu(self, ['Ort', 'Nutzer', 'Gruppe', 'Fach', 'Objekt', 'Abteilung'], x = 420, y = 6)
-        self.fUserTable = createTable(self, ['Vorname', 'Nachname', 'Nutzername', 'Rolle', 'Löschen'],x = 0, y = 50)
-        self.fLocationTable = createTable(self, ['Name','Löschen'],x = 0, y = 50)
-        self.fSubjectTable = createTable(self, ['Name','Löschen'],x = 0, y = 50)
-        self.fObjectTable = createTable(self, ['Name','Löschen'],x = 0, y = 50)
-        self.fGroupTable = createTable(self, ['Name','Löschen'],x = 0, y = 50)
-        self.fDepartmentTable = createTable(self, ['Name','Löschen'],x = 0, y = 50)
+        self.fUserTable = createTable(self, ['Vorname', 'Nachname', 'Nutzername', 'Rolle', 'Löschen'],x = 180, y = 50, width = 850)
+        self.fLocationTable = createTable(self, ['Name','Löschen'],x = 180, y = 50, width = 850)
+        self.fSubjectTable = createTable(self, ['Name','Löschen'],x = 180, y = 50, width = 850)
+        self.fObjectTable = createTable(self, ['Name','Löschen'],x = 180, y = 50, width = 850)
+        self.fGroupTable = createTable(self, ['Name','Löschen'],x = 180, y = 50, width = 850)
+        self.fDepartmentTable = createTable(self, ['Name','Löschen'],x = 180, y = 50, width = 850)
         self.fHeader = createHeader(
         'Admin Seite',
         1000,
@@ -49,13 +49,13 @@ class AdminPage(PageBase):
         self.prepareWidgets()
     def prepareWidgets(self):
         self.fAddItemButton.setFixedSize(60, 60)
+        self.fUserTable.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
+        self.fLocationTable.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
+        self.fObjectTable.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
+        self.fSubjectTable.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
+        self.fGroupTable.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
+        self.fDepartmentTable.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
 
-        self.fUserTable.move(420, 50)
-        self.fLocationTable.move(420, 50)
-        self.fSubjectTable.move(420, 50)
-        self.fObjectTable.move(420, 50)
-        self.fGroupTable.move(420, 50)
-        self.fDepartmentTable.move(420, 50)
 
         self.fLogoutButton.raise_()
         self.fDropDownMenu.raise_()

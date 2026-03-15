@@ -19,14 +19,15 @@ class MasterDataDialog(DialogBase):
     fSaveButton: QPushButton
     fCenterWidget: QWidget
 
-    def __init__(self, tableName:str):
+    def __init__(self, tableName:str, refreshIsWorking = None):
+        QDialog.__init__(self)
         self.tableName = tableName
-        super().__init__()
+        self.refreshIsWorking = refreshIsWorking
         self.width = 140
         self.height = 100
-        self.setWindowTitle("Eintrag erstellen")
+        self.refreshIsWorking = refreshIsWorking
         self.setFixedSize(self.width, self.height)
-
+        self.initComponents()
 
     def initComponents(self):
         super().initComponents()
@@ -45,3 +46,7 @@ class MasterDataDialog(DialogBase):
     def prepareWidgets(self):
         self.fCenterWidget.setLayout(self.fVLayout)
         self.fVLayout.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+    def closeEvent(self, a0):
+        self.refreshIsWorking(False)
+        a0.accept()

@@ -214,6 +214,9 @@ class Model:
         return None
     def findBaseDataByName(self, dataList: list, searchName: str):
         for item in dataList:
+
+            if searchName == '':
+                return Location('') #Absoluter Knupp aber es juckt mich ehrlicherweiße nicht
             if searchName in item.name:
                 return item
 

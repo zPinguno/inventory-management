@@ -145,10 +145,11 @@ class AddItem(DialogBase):
         location = self.model.findBaseDataByName(self.model.getAllLocations(), self.fLocationDropdown.currentText())
         state = normalizeText(self.fStateDropdown.currentText())
         responsiblePerson = self.model.getUserByUserName(self.fResponsiblePersonDropdown.currentText())
+        
+        if state is ItemState.BORROWED:
+            location = Location('')
 
         item = Item(object, group, department, subject, location, responsiblePerson, state)
-        if item.state is ItemState.BORROWED:
-            item.location = None
         return item
 
     def getInstanceByText(self, text:str, type):

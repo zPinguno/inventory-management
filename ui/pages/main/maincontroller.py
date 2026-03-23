@@ -28,15 +28,38 @@ class MainController(PageControllerBase):
         self.showLoginPage = showLoginPage
         
     def detachHandlers(self):
-        self.page.fLogoutButton.clicked.disconnect()
-        self.page.fAddItemButton.clicked.disconnect()
-        self.page.fSwitchSiteButton.clicked.disconnect()
-        self.page.fFilterDropDown.currentIndexChanged.disconnect()
-        self.page.fFilterSearchButton.clicked.disconnect()
-        self.page.fExportButton.clicked.disconnect()
-        self.page.fFilterResetButton.clicked.disconnect()
-        self.page.fTable.cellClicked.disconnect()
-
+        try:
+            self.page.fLogoutButton.clicked.disconnect()
+        except:
+            self.page.fLogoutButton
+        try:
+            self.page.fAddItemButton.clicked.disconnect()
+        except:
+            self.page.fAddItemButton
+        try:
+            self.page.fSwitchSiteButton.clicked.disconnect()
+        except:
+            self.page.fSwitchSiteButton
+        try:
+            self.page.fFilterDropDown.currentIndexChanged.disconnect()
+        except:
+            self.page.fFilterDropDown
+        try:
+            self.page.fFilterSearchButton.clicked.disconnect()
+        except:
+            self.page.fFilterSearchButton
+        try:
+            self.page.fExportButton.clicked.disconnect()
+        except:
+            self.page.fExportButton
+        try:
+            self.page.fFilterResetButton.clicked.disconnect()
+        except:
+            self.page.fFilterResetButton
+        try:
+            self.page.fTable.cellClicked.disconnect()
+        except:
+            self.page.fTable.cellClicked
     def initLogic(self):
         super().initLogic()
         self.page.fLogoutButton.clicked.connect(self.showLoginPage)
@@ -46,8 +69,6 @@ class MainController(PageControllerBase):
         self.page.fFilterSearchButton.clicked.connect(self.onSearch)
         if not self.fCurrentUser.hasRole(UserRole.TEACHER):
             self.page.fTable.cellClicked.connect(self.onEdit)
-        else:
-            self.page.fTable.cellClicked.disconnect()
         self.page.fExportButton.clicked.connect(self.createCsvExportFile)
         self.page.fFilterResetButton.clicked.connect(self.refreshItems)
         self.refreshFilter()
@@ -57,7 +78,8 @@ class MainController(PageControllerBase):
             return
         self.refreshIsCurrentlyWorking(True)
         item = self.currentTableItems[row]
-        self.showAddItemDialog(item)
+        if item.responsiblePerson.getUserName() == self.fCurrentUser.getUserName() or self.fCurrentUser.hasRole(UserRole.ADMIN):
+            self.showAddItemDialog(item)
 
     def onSearch(self):
         items = self.getSearchParamForItems()
@@ -227,7 +249,10 @@ class MainController(PageControllerBase):
     def removeItemRowAtButton(self, deleteButton, table):
         if deleteButton:
             index = table.indexAt(deleteButton.pos())
-            if index.isValid():
+            row = index.row()
+            responsibleUserName = table.item(row, 6).text()
+
+            if index.isValid() and responsibleUserName == self.fCurrentUser.getUserName() or self.fCurrentUser.hasRole(UserRole.ADMIN):
                 table.removeRow(index.row())
                 self.model.items.pop(index.row())
                 self.model.save()
